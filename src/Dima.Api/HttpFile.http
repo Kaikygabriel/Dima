@@ -1,0 +1,11 @@
+###
+POST http://localhost:5007/v1/Categories HTTP/1.1
+Content-Type: application/json
+
+{
+  "Title": "teste title",
+  "Summary": "teste summary",
+  "UserId": "3f4525ff-0a84-4f34-9ed2-e4b866a1a17b"
+}
+###
+GET http://localhost:5007/openapi/v1.json HTTP/1.1
