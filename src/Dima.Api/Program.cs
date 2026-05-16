@@ -1,7 +1,9 @@
 using Dima.Api.Category.Handler;
 using Dima.Api.Category.Request;
 using Dima.Api.Category.Response;
+using Dima.Api.Data.Context;
 using Dima.Api.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,10 @@ builder.Services.AddTransient<IHandler<CreateCategoryRequest,CreateCategoryRespo
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-
+builder.Services.AddDbContext<AppDbContext>(x => 
+    x.UseSqlServer("Server=localhost,1433;Database=Dima;User ID=sa;Password=Kaiky@2048;TrustServerCertificate=true;"));
+    
+    
 var app = builder.Build();
 
 app.MapOpenApi();
