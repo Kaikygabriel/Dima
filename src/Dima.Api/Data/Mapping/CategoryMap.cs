@@ -7,9 +7,12 @@ internal sealed class CategoryMap : IEntityTypeConfiguration<Core.Models.Categor
 {
     public void Configure(EntityTypeBuilder<Core.Models.Category> builder)
     {
-        builder.ToTable("Categories");
+        builder.ToTable("Category");
 
         builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         builder.Property(x => x.Title)
             .HasColumnType("Title")
@@ -21,7 +24,5 @@ internal sealed class CategoryMap : IEntityTypeConfiguration<Core.Models.Categor
             .HasColumnType("Description")
             .HasColumnType("TEXT")
             .IsRequired();
-        
-        
     }
 }

@@ -42,7 +42,7 @@ namespace Dima.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("Dima.Core.Models.Transaction", b =>

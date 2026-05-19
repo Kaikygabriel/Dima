@@ -1,3 +1,4 @@
+using System.Reflection;
 using Dima.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext>options) : DbContext(opt
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dima.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260516132102_Inital")]
+    [Migration("20260517114305_Inital")]
     partial class Inital
     {
         /// <inheritdoc />
@@ -45,7 +45,7 @@ namespace Dima.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("Dima.Core.Models.Transaction", b =>

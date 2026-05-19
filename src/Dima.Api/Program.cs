@@ -6,6 +6,8 @@ using Dima.Api.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connection = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+                 throw new Exception("Connection String Not Found !");
 
 builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
@@ -14,8 +16,7 @@ builder.Services.AddTransient<IHandler<CreateCategoryRequest,CreateCategoryRespo
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(x => 
-    x.UseSqlServer("Server=localhost,1433;Database=Dima;User ID=sa;Password=Kaiky@2048;TrustServerCertificate=true;"));
-    
+    x.UseSqlServer(connection));
     
 var app = builder.Build();
 

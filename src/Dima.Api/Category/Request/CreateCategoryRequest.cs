@@ -1,3 +1,3 @@
 namespace Dima.Api.Category.Request;
 
-public sealed record CreateCategoryRequest(string Title,string Summary,Guid UserId);
+public sealed record CreateCategoryRequest(string Title,string? Description,Guid UserId);

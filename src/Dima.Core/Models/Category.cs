@@ -4,7 +4,18 @@ namespace Dima.Core.Models;
 
 public class Category : Model
 {
-    public string Title { get; set; } = string.Empty;
+    private Category()
+    {
+        
+    }
+    public Category(string title, string? description ,Guid userId)
+    {
+        Title = title;
+        Description = description;
+        UserId = userId;
+    }
+
+    public string Title { get; set; } 
     public string? Description { get; set; }
     public Guid UserId { get; set; }
 }
