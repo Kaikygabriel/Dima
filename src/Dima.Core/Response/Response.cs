@@ -30,4 +30,7 @@ public class Response<T>
     
     public static implicit operator Response<T>(Error error)
         => new (error);
+
+    public static implicit operator Response<T>(T value)
+        => new(value);
 }

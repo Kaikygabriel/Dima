@@ -1,6 +1,6 @@
 namespace Dima.Core.Requests;
 
-public abstract class Request
+public abstract record Request
 {
     public Guid UserId { get; set; }
 }
