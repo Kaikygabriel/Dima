@@ -1,4 +1,5 @@
 using Dima.Api.Data.Context;
+using Dima.Api.Extensions;
 using Dima.Api.Handlers;
 using Dima.Core.Handler;
 using Dima.Core.Models;
@@ -9,17 +10,22 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
                  throw new Exception("Connection String Not Found !");
-Console.WriteLine(Fatorial(5));
-builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
-builder.Services.AddTransient<ICategoryHandler,CategoryHandler>();
+builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(x => 
     x.UseSqlServer(connection));
     
+builder.Services.AddTransient<ICategoryHandler,CategoryHandler>();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseGlobalExceptionHandlerDevelopment();
+}
 
 app.MapOpenApi();
 
@@ -35,13 +41,14 @@ app.MapPost("/v1/Categories",async
     .WithSummary("Create new Category")
     .Produces<Response<Category>>();
 
-app.Run();
+app.MapGet("/v1/Categories",async
+         (ICategoryHandler handler) =>
+    {
+        var result = await handler.GetAll(new GetAllCategoryRequest());
+        return Results.Ok(result);
+    })
+    .WithName("Categories  : get all")
+    .WithSummary("Get all Categories")
+    .Produces<Response<List<Category>>>();
 
-int Fatorial(int count ,int num = 1)
-{
-    if (count <= 0)
-        return num;
-    
-    num *= count ;
-    return Fatorial(count- 1,num);
-}
+app.Run();
