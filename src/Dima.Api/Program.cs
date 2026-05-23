@@ -5,6 +5,7 @@ using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Category;
 using Dima.Core.Response;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,17 +36,40 @@ app.MapPost("/v1/Categories",async
         (CreateCategoryRequest request,ICategoryHandler handler) =>
 {
     var result = await handler.Create(request);
-    return Results.Ok(result);
+    return
+        result.IsSuccess ? 
+        Results.Created() :
+        Results.BadRequest(result.Error);
 })
     .WithName("Categories  : create")
     .WithSummary("Create new Category")
     .Produces<Response<Category>>();
 
-app.MapGet("/v1/Categories",async
-         (ICategoryHandler handler) =>
+
+app.MapGet("/v1/Categories/{id}/{userId}",async
+         (ICategoryHandler handler, Guid id,Guid userId) =>
     {
-        var result = await handler.GetAll(new GetAllCategoryRequest());
-        return Results.Ok(result);
+        var request = new GetCategoryByIdRequest(id){UserId = userId};
+        
+        var result = await handler.GetById(request);
+        
+        return result.IsSuccess ?
+            Results.Ok(result) :
+            Results.BadRequest(result.Error);
+    })
+    .WithName("Categories  : get by id")
+    .WithSummary("Get category by id")
+    .Produces<Response<Category>>();
+
+app.MapGet("/v1/Categories/{userId:guid}",async
+         (ICategoryHandler handler,Guid userId) =>
+    {
+        var request = new GetAllCategoryRequest() { UserId = userId };
+        var result = await handler.GetAll(request);
+        
+        return result.IsSuccess ?
+            Results.Ok(result) :
+            Results.BadRequest(result.Error);
     })
     .WithName("Categories  : get all")
     .WithSummary("Get all Categories")

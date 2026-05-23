@@ -16,22 +16,25 @@ internal class CategoryHandler : ICategoryHandler
         _appDbContext = appDbContext;
     }
 
-    public async Task<Response<Category>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default)
+    public async Task<Response<Category?>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default)
     {
-        var category = await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == request.Id,cancellationToken);
+        var category = await _appDbContext.Categories
+            .FirstOrDefaultAsync(x => x.Id == request.Id&& x.UserId == request.UserId,cancellationToken);
         if (category is null)
             return new Error("Category.NotFound", "not found category !");
         
         return category;
     }
 
-    public async Task<Response<List<Category>>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default)
+    public async Task<Response<List<Category>?>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default)
     {
         var categories = await _appDbContext.Categories
+            .Where(x=>x.UserId == request.UserId)
             .Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
-        
+        if (!categories.Any())
+            return new Error("Categories.NotFound", "Categories not found !");
         return categories;
     }
 
@@ -49,7 +52,8 @@ internal class CategoryHandler : ICategoryHandler
 
     public async Task<Response<Category>> Update(UpdateCategoryRequest request, CancellationToken cancellationToken = default)
     {
-        var category =await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var category =await _appDbContext.Categories
+            .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId, cancellationToken);
         if (category is null)
             return new Error("Category.NotFound", "category not found !");
         
@@ -66,7 +70,8 @@ internal class CategoryHandler : ICategoryHandler
 
     public async Task<Response<Category>> Delete(DeleteCategoryRequest request, CancellationToken cancellationToken = default)
     {
-        var category =await _appDbContext.Categories.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var category =await _appDbContext.Categories
+            .FirstOrDefaultAsync(x => x.Id == request.Id&& x.UserId == request.UserId, cancellationToken);
         if (category is null)
             return new Error("Category.NotFound", "category not found !");
         
