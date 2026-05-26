@@ -16,26 +16,36 @@ internal class CategoryHandler : ICategoryHandler
         _appDbContext = appDbContext;
     }
 
-    public async Task<Response<Category?>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default)
+    public async Task<Response<Category>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default)
     {
         var category = await _appDbContext.Categories
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.Id&& x.UserId == request.UserId,cancellationToken);
+        
         if (category is null)
             return new Error("Category.NotFound", "not found category !");
         
         return category;
     }
 
-    public async Task<Response<List<Category>?>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default)
+    public async Task<PagedResponse<List<Category>>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default)
     {
-        var categories = await _appDbContext.Categories
-            .Where(x=>x.UserId == request.UserId)
+        var query =_appDbContext.Categories
+            .AsNoTracking()
+            .Where(x => x.UserId == request.UserId);
+        
+        var categories = await query
             .Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
+        
         if (!categories.Any())
             return new Error("Categories.NotFound", "Categories not found !");
-        return categories;
+
+        var count = await query
+            .CountAsync(cancellationToken);
+        
+        return  new(categories,request.Page,count,request.PageSize);
     }
 
     public async Task<Response<Category>> Create(CreateCategoryRequest request, CancellationToken cancellationToken = default)
@@ -56,11 +66,9 @@ internal class CategoryHandler : ICategoryHandler
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId, cancellationToken);
         if (category is null)
             return new Error("Category.NotFound", "category not found !");
-        
-        category = new Category(request.Title, request.Description,request.UserId)
-        {
-            Id = request.Id
-        };
+
+        category.Description = request.Description;
+        category.Title = request.Title;
         
         _appDbContext.Update(category);
         await _appDbContext.SaveChangesAsync(cancellationToken);

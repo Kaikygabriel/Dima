@@ -6,7 +6,7 @@ namespace Dima.Api.Data.Context;
 
 public class AppDbContext(DbContextOptions<AppDbContext>options) : DbContext(options) 
 {
-    public DbSet<Core.Models.Category>Categories { get; set; }= null!;
+    public DbSet<Category>Categories { get; set; }= null!;
     public DbSet<Transaction> Transactions { get; set; } = null!;
 
     
@@ -18,5 +18,6 @@ public class AppDbContext(DbContextOptions<AppDbContext>options) : DbContext(opt
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(Console.WriteLine);
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 }

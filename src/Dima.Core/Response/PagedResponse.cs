@@ -22,7 +22,7 @@ public class PagedResponse<T> : Response<T>
         
     }
     public int CurrentPage { get; set; }
-    public int PageTotal => (int)Math.Ceiling((double)PageSize / TotalCount);
+    public int PageTotal => (int)Math.Ceiling((double)TotalCount / PageSize);
     public int TotalCount { get; set; }
     public int PageSize { get; set; } 
     

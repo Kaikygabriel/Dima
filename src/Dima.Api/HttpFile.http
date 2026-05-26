@@ -8,6 +8,6 @@ Content-Type: application/json
   "UserId": "3f4525ff-0a84-4f34-9ed2-e4b866a1a17b"
 }
 ###
-GET http://localhost:5007/v1/Categories HTTP/1.1
+GET http://localhost:5007/v1/Categories/3fa85f64-5717-4562-b3fc-2c963f66afa6/0/25 HTTP/1.1
 
 ###

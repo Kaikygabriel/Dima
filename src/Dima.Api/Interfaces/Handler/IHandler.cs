@@ -1,4 +1,4 @@
-namespace Dima.Api.Interfaces;
+namespace Dima.Api.Interfaces.Handler;
 
 public interface IHandler<TRequest,TResponse>
 {
