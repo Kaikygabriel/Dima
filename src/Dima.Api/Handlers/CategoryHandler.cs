@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dima.Api.Handlers;
 
-internal class CategoryHandler : ICategoryHandler
+internal sealed class CategoryHandler : ICategoryHandler
 {
     private readonly AppDbContext _appDbContext;
 

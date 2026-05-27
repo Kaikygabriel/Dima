@@ -2,6 +2,7 @@ using Dima.Api.Data.Context;
 using Dima.Api.EndPoints;
 using Dima.Api.Handlers;
 using Dima.Core.Handler;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,9 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(x =>
     x.UseSqlServer(connection));
     
 builder.Services.AddTransient<ICategoryHandler,CategoryHandler>();
+builder.Services.AddTransient<ITransactionHandler,TransactionHandler>();
 
 builder.Services.AddExceptionHandler<ExceptionGlobalHandler>();
 builder.Services.AddProblemDetails();
+
 
 var app = builder.Build();
 
