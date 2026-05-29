@@ -22,7 +22,10 @@ public static class EndPointBase
             .WithTags("Transactions")
             .Map<CreateTransactionEndpoint>()
             .Map<UpdateTransactionEndpoint>()
-            .Map<DeleteTransactionEndPoint>();
+            .Map<DeleteTransactionEndPoint>()
+            .Map<GetByIdTransactionEndPoint>()
+            .Map<GetAllTransactionsByPaidEndPoint>()
+            .Map<GetAllTransactionsByCreateAtEndPoint>();
         
         return app;
     }

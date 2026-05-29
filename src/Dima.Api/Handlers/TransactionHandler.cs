@@ -1,4 +1,5 @@
 using Dima.Api.Data.Context;
+using Dima.Core.Commum.Extensions;
 using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Transaction;
@@ -14,6 +15,71 @@ internal sealed class TransactionHandler : ITransactionHandler
     public TransactionHandler(AppDbContext context)
     {
         _context = context;
+    }
+
+    public async Task<PagedResponse<IEnumerable<Transaction>>> GetAllByCreateAt(GetTransactionsRequest request, CancellationToken cancellationToken = default)
+    {
+        var start = request.Start;
+        var end = request.Start;
+        if (start is null || end is null)
+        {
+            var now = DateTime.UtcNow;
+
+            start = now.GetFirstDayOfMonth();
+            end = now.GetLastDayOfMonth(); 
+        }
+
+        var transactions =  await _context.Transactions
+            .Where(x=>x.UserId == request.UserId)
+            .Where(x => x.CreateAt >= start && x.CreateAt <= end )
+            .OrderBy(x=>x.CreateAt)
+            .Skip(request.Page * request.PageSize)
+            .Take(request.PageSize)
+            .ToListAsync(cancellationToken);
+        
+        var count = await _context.Transactions
+            .Where(x=>x.UserId == request.UserId)
+            .Where(x => x.PaidOrReceivedAt >= start && x.PaidOrReceivedAt <= end)
+            .CountAsync(cancellationToken);
+        
+        return new PagedResponse<IEnumerable<Transaction>>(transactions, request.Page, count, request.PageSize);
+    }
+    
+    public async Task<PagedResponse<IEnumerable<Transaction>>> GetAllByPaidOrReceivedAt(GetTransactionsRequest request, CancellationToken cancellationToken = default)
+    {
+        var start = request.Start;
+        var end = request.Start;
+        if (start is null || end is null)
+        {
+            var now = DateTime.UtcNow;
+
+            start = now.GetFirstDayOfMonth();
+            end = now.GetLastDayOfMonth(); 
+        }
+
+        var transactions =  await _context.Transactions
+            .Where(x=>x.UserId == request.UserId)
+            .Where(x => x.PaidOrReceivedAt >= start && x.PaidOrReceivedAt <= end )
+            .OrderBy(x=>x.PaidOrReceivedAt)
+            .Skip(request.Page * request.PageSize)
+            .Take(request.PageSize)
+            .ToListAsync(cancellationToken);
+        
+        var count = await _context.Transactions
+            .Where(x=>x.UserId == request.UserId)
+            .Where(x => x.PaidOrReceivedAt >= start && x.PaidOrReceivedAt <= end)
+            .CountAsync(cancellationToken);
+        
+        return new PagedResponse<IEnumerable<Transaction>>(transactions, request.Page, count, request.PageSize);
+    }
+
+    public async Task<Response<Transaction>> GetById(GetTransactionsByIdRequest request, CancellationToken cancellationToken = default)
+    {
+        var transaction =
+            await _context.Transactions.FirstOrDefaultAsync(x => x.Id == request.Id && request.UserId == x.UserId,cancellationToken);
+        if (transaction is null)
+            return new Error("Transaction.NotFound", "Not Found");
+        return transaction;
     }
 
     public async Task<Response<Transaction>> Create(CreateTransactionRequest request,CancellationToken cancellationToken = default)

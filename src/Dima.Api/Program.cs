@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var connection = builder.Configuration.GetConnectionString("DefaultConnection") ?? 
-                 throw new Exception("Connection String Not Found !");
+var connection = builder.Configuration.GetConnectionString("DefaultConnection")
+                 ?? throw new Exception("Connection String Not Found !");
 
 builder.Services.AddLogging();
-
 builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
@@ -23,13 +22,11 @@ builder.Services.AddTransient<ITransactionHandler,TransactionHandler>();
 builder.Services.AddExceptionHandler<ExceptionGlobalHandler>();
 builder.Services.AddProblemDetails();
 
-
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
-{
     app.UseExceptionHandler();
-}
+
+app.MapGet("/Health-Check", () => Results.Ok);
 
 app.MapOpenApi();
 
