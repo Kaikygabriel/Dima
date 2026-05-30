@@ -1,6 +1,12 @@
+using System.ComponentModel.DataAnnotations;
 using Dima.Core.Enum;
 
 namespace Dima.Core.Requests.Transaction;
 
-public record CreateTransactionRequest(string Title,ETypeTransaction Type,decimal Amount,Guid CategoryId,DateTime? PaidOrReceivedAt)
+public record CreateTransactionRequest(
+    [Required]string Title,
+    [Required]ETypeTransaction Type,
+    [Required]decimal Amount,
+    [Required]Guid CategoryId,
+    [Required]DateTime? PaidOrReceivedAt)
     : Request;

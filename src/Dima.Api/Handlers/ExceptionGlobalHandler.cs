@@ -21,6 +21,7 @@ public class ExceptionGlobalHandler : IExceptionHandler
         {
             var errorMessage = new
             {
+                
                 contentError.Error.Message,
                 contentError.Error.StackTrace,
                 contentError.Error.Source,

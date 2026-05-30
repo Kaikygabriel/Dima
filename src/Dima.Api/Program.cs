@@ -2,7 +2,8 @@ using Dima.Api.Data.Context;
 using Dima.Api.EndPoints;
 using Dima.Api.Handlers;
 using Dima.Core.Handler;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,12 @@ builder.Services.AddTransient<ITransactionHandler,TransactionHandler>();
 builder.Services.AddExceptionHandler<ExceptionGlobalHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddIdentity<IdentityDbContext,AppDbContext>();
+
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddIdentityCookies();
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
     app.UseExceptionHandler();
@@ -33,5 +40,9 @@ app.MapOpenApi();
 app.UseSwaggerUI(x=>x.SwaggerEndpoint("/openapi/v1.json","Dima v1"));
 
 app.MapEndpoints();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.Run();
