@@ -25,6 +25,11 @@ public class AppDbContext(DbContextOptions<AppDbContext>options) :
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        // 2. Corrige o erro específico do Passkey sem quebrar o resto
+        //modelBuilder.Entity().HasNoKey();
+        
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 

@@ -1,9 +1,9 @@
 using Dima.Api.Data.Context;
 using Dima.Api.EndPoints;
 using Dima.Api.Handlers;
+using Dima.Api.Models;
 using Dima.Core.Handler;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +23,10 @@ builder.Services.AddTransient<ITransactionHandler,TransactionHandler>();
 builder.Services.AddExceptionHandler<ExceptionGlobalHandler>();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddIdentity<IdentityDbContext,AppDbContext>();
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddApiEndpoints();
 
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddIdentityCookies();

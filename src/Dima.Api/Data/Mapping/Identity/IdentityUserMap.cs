@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Dima.Api.Data.Mapping;
+namespace Dima.Api.Data.Mapping.Identity;
 
 public class IdentityUserMap : IEntityTypeConfiguration<User>
 {
