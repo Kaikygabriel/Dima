@@ -30,6 +30,18 @@ public  static class BuilderExtensions
         return builder;
     }
 
+    public static WebApplicationBuilder AddCors(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(x =>
+            x.AddDefaultPolicy( x =>
+                x.WithOrigins(builder.Configuration["Url:FrontEndHttp"]!,builder.Configuration["Url:FrontEndHttps"]!)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials())
+            );
+        return builder;
+    }
+    
     public static WebApplicationBuilder AddConfigurationLogging(this WebApplicationBuilder builder)
     {
         builder.Services.AddLogging();

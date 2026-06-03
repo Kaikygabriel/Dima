@@ -7,19 +7,17 @@ builder.AddConfiguration();
 builder.AddDependency();
 builder.AddConfigurationLogging();
 builder.AddSecurity();
+builder.AddCors();
+builder.Services.AddDocumentation();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwaggerUI(x=>x.SwaggerEndpoint("/openapi/v1.json","Dima v1"));
-    app.UseExceptionHandler();
-}
+    app.UseDeveloperEnvironment();
 
 app.MapEndpoints();
 
-app.UseAuthentication();
+app.UseCors();
 
-app.UseAuthorization();
+app.UseSecurity();
 
 app.Run();
