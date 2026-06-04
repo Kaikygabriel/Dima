@@ -1,0 +1,38 @@
+@page "/Login"
+@using Dima.Pwa.Model.Identity
+@layout HeadlessLayout
+<PageTitle>Login</PageTitle>
+<h1 Style="text-align: center; margin-bottom: 20px;">login</h1>
+ 
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12"  sm="7">
+        <MudPaper Class="pa-4"  Style="justify-content: center; ;display: flex; flex-direction: column">
+            <MudForm @ref="form" @bind-Errors="errors" @Model="Model" >
+                <MudTextField T="string" Label="Email" HelperText="Email Valid" InputType="InputType.Email" @bind-Value="Model.Email"/>
+                <MudTextField T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password" @bind-Value="Model.Password"/>
+            </MudForm>
+            
+            <MudButton OnClick="Handler" Style="margin-top: 10px" Variant="Variant.Filled" Color="Color.Primary">Submit</MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    private MudForm form;
+    private UserLogin Model = new();
+    private string[] errors;
+
+    private async Task Handler()
+    {
+        await form.Validate();
+        
+        if (!form.IsValid)
+        {
+            return;
+        }
+
+        Console.WriteLine(Model.Email);
+        Console.WriteLine(Model.Password);
+    }
+}
