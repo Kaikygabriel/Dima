@@ -1,17 +1,19 @@
 @page "/Login"
 @using Dima.Pwa.Model.Identity
 @layout HeadlessLayout
+
 <PageTitle>Login</PageTitle>
-<h1 Style="text-align: center; margin-bottom: 20px;">login</h1>
+<h1 Style="text-align: center; margin-bottom: 20px;">Login</h1>
  
-<MudGrid Justify="Justify.Center">
-    <MudItem xs="12"  sm="7">
-        <MudPaper Class="pa-4"  Style="justify-content: center; ;display: flex; flex-direction: column">
-            <MudForm @ref="form" @bind-Errors="errors" @Model="Model" >
-                <MudTextField T="string" Label="Email" HelperText="Email Valid" InputType="InputType.Email" @bind-Value="Model.Email"/>
-                <MudTextField T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password" @bind-Value="Model.Password"/>
+<MudGrid Justify="Justify.Center" >
+    <MudItem xs="11" sm="7" >
+        <MudPaper Class="pa-4 mud-width-full d-flex justify-center rounded-lg flex-column">
+            <MudImage Src="Images/logo.png" Alt="Dima - Controle Financeiro" />
+            <MudForm @ref="_form" @bind-Errors="_errors" @Model="_model" Spacing="4">
+                <MudTextField T="string" Label="Email" HelperText="Email Valid" InputType="InputType.Email" @bind-Value="_model.Email"/>
+                <MudTextField T="string" Label="Password" HelperText="Choose a strong password" InputType="InputType.Password" @bind-Value="_model.Password"/>
             </MudForm>
-            
+
             <MudButton OnClick="Handler" Style="margin-top: 10px" Variant="Variant.Filled" Color="Color.Primary">Submit</MudButton>
         </MudPaper>
     </MudItem>
@@ -19,20 +21,20 @@
 
 @code
 {
-    private MudForm form;
-    private UserLogin Model = new();
-    private string[] errors;
+    private MudForm _form= null!;
+    private UserLogin _model = new();
+    private string[] _errors = [];
 
     private async Task Handler()
     {
-        await form.Validate();
+        await _form.Validate();
         
-        if (!form.IsValid)
+        if (!_form.IsValid)
         {
             return;
         }
 
-        Console.WriteLine(Model.Email);
-        Console.WriteLine(Model.Password);
+        Console.WriteLine(_model.Email);
+        Console.WriteLine(_model.Password);
     }
 }
