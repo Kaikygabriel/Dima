@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dima.Pwa.Model.Identity;
 
-public class UserLogin
+public class UserIdentity
 {
     [Required]
     [Length(minimumLength:4,50)]

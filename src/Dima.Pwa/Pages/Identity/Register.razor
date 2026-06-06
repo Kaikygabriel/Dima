@@ -1,38 +1,40 @@
-@page "/Login"
+@page "/Register"
 @using System.ComponentModel.DataAnnotations
 @using Dima.Pwa.Model.Identity
 @layout HeadlessLayout
 
-<PageTitle>Login</PageTitle>
-<h1 class="mb-20"  Style="text-align: center;">Login</h1>
+<PageTitle>Register</PageTitle>
+<h1 class="mb-20"  Style="text-align: center;">Register</h1>
  
 <MudGrid Justify="Justify.Center" >
     <MudItem xs="11" sm="7" >
-        <MudPaper Class="pa-4 mud-width-full d-flex justify-center rounded-lg flex-column">
-            <MudImage Src="Images/logo.png" Alt="Dima - Controle Financeiro" />
+        <MudPaper Class="pa-4 mud-width-full d-flex justify-center  rounded-lg flex-column">
+            <div Class="d-flex justify-center align-center">
+                <MudImage Src="Images/dima.png"  width="200" Alt="Dima - Controle Financeiro"/>
+            </div>
             <MudForm @ref="_form" @bind-Errors="_errors" @Model="_model" Spacing="4">
-                <MudTextField T="string" 
+                <MudTextField T="string"
                               Label="Email"
                               HelperText=""
                               Required="true"
                               Validation="@(new EmailAddressAttribute())"
                               InputType="InputType.Email"
                               @bind-Value="_model.Email"/>
-                
-                <MudTextField 
+
+                <MudTextField
                     T="string"
                     Label="Password"
                     Required="true"
-                    Validation="@(new LengthAttribute(4,100))"
+                    Validation="@(new LengthAttribute(4, 100))"
                     HelperText="Choose a strong password"
                     InputType="InputType.Password"
                     @bind-Value="_model.Password"/>
-                
+
             </MudForm>
-            
-            <div Class="mt-10 d-flex flex-row justify-space-around" >
-                <MudButton OnClick="Handler"  Variant="Variant.Filled" Color="Color.Primary">Entrar</MudButton>
-                <MudButton Href="/Register"  Variant="Variant.Outlined" Color="Color.Primary">Registrar</MudButton>
+
+            <div Class="mt-10 d-flex flex-row justify-space-around">
+                <MudButton OnClick="Handler" Variant="Variant.Filled" Color="Color.Primary">Registrar</MudButton>
+                <MudButton Href="/Login" Variant="Variant.Outlined" Color="Color.Primary">Login</MudButton>
             </div>
         </MudPaper>
     </MudItem>

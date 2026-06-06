@@ -12,7 +12,7 @@ public static class EndPointBase
     {
         var endpoints = app.MapGroup("");
         
-        app.MapGet("/", () => Results.Ok);
+        app.MapGet("/", () => Results.Ok());
         
         endpoints.MapGroup("Categories")
             .WithTags("Categories")
