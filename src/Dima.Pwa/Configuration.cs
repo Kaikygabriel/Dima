@@ -5,6 +5,8 @@ namespace Dima.Pwa;
 
 public static class Configuration
 {
+    public const string ApiUrlHttps = "https://localhost:7279";
+    public const string HttpClientName = "dima";
     public static MudTheme Theme = new()
         {
             Typography = new()

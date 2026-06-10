@@ -31,11 +31,12 @@ public static class EndPointBase
             .Map<GetAllTransactionsByPaidEndPoint>()
             .Map<GetAllTransactionsByCreateAtEndPoint>();
         
-        endpoints.MapGroup("Identity")
+        endpoints.MapGroup("v1/Identity")
             .Map<LogoutEndPoint>()
-            .Map<GetRolesEndPoint>();
+            .Map<GetRolesEndPoint>()
+            .Map<GetInfoId>();
         
-        endpoints.MapGroup("Identity")
+        endpoints.MapGroup("v1/Identity")
             .MapIdentityApi<User>();
 
         return app;

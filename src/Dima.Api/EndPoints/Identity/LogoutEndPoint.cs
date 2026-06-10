@@ -6,7 +6,7 @@ public class LogoutEndPoint : IEndPoint
 {
     public static void Map(IEndpointRouteBuilder builder)
     {
-        builder.MapPost("Identity/Logout",async (HttpContext context) =>
+        builder.MapPost("/Logout",async (HttpContext context) =>
         {
             var authenticationKey = ".AspNetCore.Identity.Application";
             context.Response.Cookies.Delete(authenticationKey);

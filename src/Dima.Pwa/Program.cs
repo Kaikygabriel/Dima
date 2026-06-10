@@ -8,6 +8,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddHttpClient(Configuration.HttpClientName, x =>
+{
+    x.BaseAddress = new Uri(Configuration.ApiUrlHttps);
+}).AddHttpMessageHandler<CookieHandler>();
 
 await builder.Build().RunAsync();
