@@ -8,7 +8,7 @@ public class GetRolesEndPoint : IEndPoint
 {
     public static void Map(IEndpointRouteBuilder builder)
     {
-        builder.MapPost("/Roles", (ClaimsPrincipal user) =>
+        builder.MapGet("/Roles", (ClaimsPrincipal user) =>
         {
             if (user.Identity is null || !user.Identity.IsAuthenticated)
                 return Results.Unauthorized();
@@ -17,7 +17,7 @@ public class GetRolesEndPoint : IEndPoint
                 .Where(x => x.Type == ClaimsIdentity.DefaultRoleClaimType)
                 .Select(x => new RoleClaim(x.Issuer, x.Type, x.Value, x.ValueType, x.OriginalIssuer));
         
-            return Results.Ok(Dima.Core.Response.Response<IEnumerable<object>>.Success(roles));
+            return Results.Ok(Dima.Core.Response.Response<IEnumerable<RoleClaim>>.Success(roles));
         }).RequireAuthorization();
     }
 }

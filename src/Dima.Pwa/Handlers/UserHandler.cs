@@ -27,7 +27,7 @@ internal sealed class UserHandler : IUserHandler
     {
         var requestClient = await _client.PostAsJsonAsync("v1/Identity/register",request);
         if (!requestClient.IsSuccessStatusCode)
-            return new Error($"{requestClient.StatusCode}",$"{requestClient.Content}");
+            return new Error($"{(int)requestClient.StatusCode}",$"{requestClient.Content}");
 
         return Response<string>.Success("Cadastro Realizado com Sucesso");
     }
