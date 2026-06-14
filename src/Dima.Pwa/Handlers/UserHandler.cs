@@ -5,7 +5,7 @@ using Dima.Core.Response;
 
 namespace Dima.Pwa.Handlers;
 
-internal sealed class UserHandler : IUserHandler
+public sealed class UserHandler : IUserHandler
 {
     private readonly HttpClient _client;
     
@@ -16,7 +16,7 @@ internal sealed class UserHandler : IUserHandler
 
     public async Task<Response<string>> LoginAsync(LoginRequest request)
     {
-        var requestClient = await _client.PostAsJsonAsync("v1/Identity/login?useCookies=true&useSessionCookies=true",request);
+        var requestClient = await _client.PostAsJsonAsync("v1/Identity/login?useCookies=true",request);
         if (!requestClient.IsSuccessStatusCode)
             return new Error($"{(int)requestClient.StatusCode}",$"{requestClient.Content}");
 
