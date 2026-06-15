@@ -10,10 +10,10 @@ namespace Dima.Pwa.Pages.Identity;
 
 public partial class RegisterPage : ComponentBase
 {
-    protected MudForm Form = null!;
     protected UserIdentity Model = new();
     protected string[] Errors = [];
-    protected bool IsBusy = false;
+    protected bool IsBusy ;
+    
     [Inject]
     public ISnackbar Snackbar { get; set; } = null!;
     
@@ -29,14 +29,12 @@ public partial class RegisterPage : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         var userAuth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (userAuth.User.Identity is not null && userAuth.User.Identity.IsAuthenticated)
-        {
+        if (userAuth.User.Identity is {IsAuthenticated : true})
             Nav.NavigateTo("/");
-            return;
-        }
+        
     }
 
-    protected async Task TryHandler()
+    protected async Task TryOnValidSubmitAsync()
     {
         try
         {
@@ -55,12 +53,6 @@ public partial class RegisterPage : ComponentBase
 
     private async Task Handler()
     {
-        if (!Form.IsValid)
-        {
-            ShowError( string.Join(" ,", Form.Errors));
-            return;
-        }
-
         var user = new RegisterRequest(Model.Email, Model.Password);
 
         var resultRegister = await UserHandler.RegisterAsync(user);

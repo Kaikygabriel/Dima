@@ -12,7 +12,8 @@
             <div Class="d-flex justify-center align-center">
                 <MudImage Src="Images/dima.png"  width="200" Alt="Dima - Controle Financeiro"/>
             </div>
-            <MudForm @ref="Form" @bind-Errors="Errors" @Model="Model" Spacing="4">
+            <EditForm OnValidSubmit="TryOnValidSubmitAsync"  Model="Model" Spacing="4" >
+                <DataAnnotationsValidator/>
                 <MudTextField T="string"
                               Label="Email"
                               HelperText=""
@@ -20,7 +21,8 @@
                               Validation="@(new EmailAddressAttribute())"
                               InputType="InputType.Email"
                               @bind-Value="Model.Email"/>
-
+                <ValidationMessage For="@(()=>Model.Email)" />
+                
                 <MudTextField
                     T="string" 
                     Label="Password"
@@ -29,21 +31,21 @@
                     HelperText="Choose a strong password"
                     InputType="InputType.Password"
                     @bind-Value="Model.Password"/>
+                <ValidationMessage For="@(()=>Model.Password)" />
 
-            </MudForm>
-
-            <div Class="mt-10 d-flex flex-row justify-space-around">
-                @if (IsBusy)
-                {
-                    <MudSkeleton Height="36px" Width="100px" SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" />
-                    <MudSkeleton Height="36px" Width="80px" SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" />
-                }
-                else
-                {
-                    <MudButton OnClick="TryHandler" Variant="Variant.Filled" Color="Color.Primary">Registrar</MudButton>
-                    <MudButton Href="/Login" Variant="Variant.Outlined" Color="Color.Primary">Login</MudButton>
-                } 
-            </div>
+                <div Class="mt-10 d-flex flex-row justify-space-around">
+                    @if (IsBusy)
+                    {
+                        <MudSkeleton Height="36px" Width="100px" SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" />
+                        <MudSkeleton Height="36px" Width="80px" SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" />
+                    }
+                    else
+                    {
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Registrar</MudButton>
+                        <MudButton Href="/Login" Variant="Variant.Outlined" Color="Color.Primary">Login</MudButton>
+                    } 
+                </div>
+            </EditForm>
         </MudPaper>
     </MudItem>
 </MudGrid>
