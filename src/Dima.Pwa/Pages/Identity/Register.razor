@@ -20,8 +20,8 @@
                               Required="true"
                               Validation="@(new EmailAddressAttribute())"
                               InputType="InputType.Email"
+                              For="@(()=>Model.Email)"
                               @bind-Value="Model.Email"/>
-                <ValidationMessage For="@(()=>Model.Email)" />
                 
                 <MudTextField
                     T="string" 
@@ -30,8 +30,8 @@
                     Validation="@(new LengthAttribute(4, 100))"
                     HelperText="Choose a strong password"
                     InputType="InputType.Password"
+                    For="@(()=>Model.Password)"
                     @bind-Value="Model.Password"/>
-                <ValidationMessage For="@(()=>Model.Password)" />
 
                 <div Class="mt-10 d-flex flex-row justify-space-around">
                     @if (IsBusy)

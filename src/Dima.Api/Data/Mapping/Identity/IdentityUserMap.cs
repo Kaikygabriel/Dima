@@ -11,8 +11,8 @@ public class IdentityUserMap : IEntityTypeConfiguration<User>
     {
         builder.ToTable("IdentityUser");
 
-        builder.HasKey(x => x.Id);
-
+        builder.HasKey(x => x.Id) ;
+        
         builder.Property(x => x.UserName)
             .HasColumnType("VARCHAR")
             .HasMaxLength(120)

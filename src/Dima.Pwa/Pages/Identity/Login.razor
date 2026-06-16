@@ -1,6 +1,6 @@
 @page "/Login"
 @using System.ComponentModel.DataAnnotations
-@using Dima.Pwa.Model.Identity
+@inherits LoginPage
 @layout HeadlessLayout
 
 <PageTitle>Login</PageTitle>
@@ -10,50 +10,41 @@
     <MudItem xs="11" sm="7" >
         <MudPaper Class="pa-4 mud-width-full d-flex justify-center rounded-lg flex-column">
             <MudImage Src="Images/logo.png" Alt="Dima - Controle Financeiro" />
-            <MudForm @ref="_form" @bind-Errors="_errors" @Model="_model" Spacing="4">
-                <MudTextField T="string" 
+            <EditForm OnValidSubmit="TryOnValidSubmitAsync" Model="Model" Spacing="4">
+                <DataAnnotationsValidator/>
+                <MudTextField T="string"
                               Label="Email"
                               HelperText=""
                               Required="true"
                               Validation="@(new EmailAddressAttribute())"
                               InputType="InputType.Email"
-                              @bind-Value="_model.Email"/>
+                              For="@(()=>Model.Email)"
+                              @bind-Value="Model.Email"/>
                 
-                <MudTextField 
-                    T="string"
+                <MudTextField
+                    T="string" 
                     Label="Password"
                     Required="true"
-                    Validation="@(new LengthAttribute(4,100))"
+                    Validation="@(new LengthAttribute(4, 100))"
                     HelperText="Choose a strong password"
                     InputType="InputType.Password"
-                    @bind-Value="_model.Password"/>
-                
-            </MudForm>
+                    For="@(()=>Model.Password)"
+                    @bind-Value="Model.Password"/>
+
+                <div Class="mt-10 d-flex flex-row justify-space-around">
+                    @if (IsBusy)
+                    {
+                        <MudSkeleton Height="36px" Width="100px" SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" />
+                        <MudSkeleton Height="36px" Width="80px" SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" />
+                    }
+                    else 
+                    {                    
+                        <MudButton ButtonType="ButtonType.Submit"  Variant="Variant.Filled" Color="Color.Primary">Entrar</MudButton>
+                        <MudButton Href="/Register"  Variant="Variant.Outlined" Color="Color.Primary">Registrar</MudButton>
+                    }
+                </div>
+            </EditForm>
             
-            <div Class="mt-10 d-flex flex-row justify-space-around" >
-                <MudButton OnClick="Handler"  Variant="Variant.Filled" Color="Color.Primary">Entrar</MudButton>
-                <MudButton Href="/Register"  Variant="Variant.Outlined" Color="Color.Primary">Registrar</MudButton>
-            </div>
         </MudPaper>
     </MudItem>
 </MudGrid>
-<AuthorizeView></AuthorizeView>
-@code
-{
-    private MudForm _form= null!;
-    private UserIdentity _model = new();
-    private string[] _errors = [];
-
-    private async Task Handler()
-    {
-        await _form.Validate();
-        
-        if (!_form.IsValid)
-        {
-            return;
-        }
-
-        Console.WriteLine(_model.Email);
-        Console.WriteLine(_model.Password);
-    }
-}

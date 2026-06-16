@@ -17,9 +17,10 @@ public sealed class UserHandler : IUserHandler
     public async Task<Response<string>> LoginAsync(LoginRequest request)
     {
         var requestClient = await _client.PostAsJsonAsync("v1/Identity/login?useCookies=true",request);
+        Console.WriteLine($"STATUS CODE {requestClient.StatusCode}");
         if (!requestClient.IsSuccessStatusCode)
             return new Error($"{(int)requestClient.StatusCode}",$"{requestClient.Content}");
-
+        
         return Response<string>.Success("Login Realizado com Sucesso");
     }
 

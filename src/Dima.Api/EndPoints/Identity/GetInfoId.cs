@@ -12,10 +12,9 @@ public class GetInfoId : IEndPoint
         {
             if (claims.Identity is null || !claims.Identity.IsAuthenticated)
                 return Results.Unauthorized();
-            var email = claims.Identity.Name;
-            if(email is null)
-                return Results.Unauthorized();
-            return Results.Ok(context.Users.FirstOrDefault(x => x.Email == email)!.Id);
+            var id = Guid.Parse(claims.Identity.Name!);
+
+            return Results.Ok(context.Users.FirstOrDefault(x => x.Id == id)!.Id);
         });     
     }
 }

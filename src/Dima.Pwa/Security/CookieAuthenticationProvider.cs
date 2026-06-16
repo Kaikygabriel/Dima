@@ -1,9 +1,6 @@
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Text.Json;
 using Dima.Core.Models.Accounts;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Dima.Pwa.Security;
@@ -21,7 +18,8 @@ public class CookieAuthenticationProvider : AuthenticationStateProvider,ICookieA
 
     public async Task<bool> CheckAuthenticationAsync()
     {
-        await CheckAuthenticationAsync();
+        await GetAuthenticationStateAsync();
+        
         return _isAuthentication;
     }
 
@@ -32,10 +30,14 @@ public class CookieAuthenticationProvider : AuthenticationStateProvider,ICookieA
 
         var user = await GetUserAsync();
         if (user is null)
+        {
+            Console.WriteLine("CHEGANDO COMO NULL USER");
             return new AuthenticationState(claimsPrincipal);
+        }
 
         var claimsOfUser = await GetClaimsFromUser(user);
         var id = new ClaimsIdentity(claimsOfUser, nameof(CookieAuthenticationProvider));
+        Console.WriteLine(id.IsAuthenticated  + " od ");
         claimsPrincipal = new ClaimsPrincipal(id);
 
         _isAuthentication = true;
@@ -54,15 +56,25 @@ public class CookieAuthenticationProvider : AuthenticationStateProvider,ICookieA
             if (user is null)
                 return null;
             
-            var idConvert = Guid.TryParse(await _httpClient.GetFromJsonAsync<string>("v1/Identity/manage/id"), out Guid id);
-            if (!idConvert)
-                return null;
-        
-            user.Id = id;
+            var response = await _httpClient.GetAsync("v1/Identity/manage/id");
+            
+            response.EnsureSuccessStatusCode();
+            
+            var responseId = await response.Content.ReadAsStringAsync();
+            
+            var arr = responseId.ToCharArray().ToList();
+            arr.Remove(arr.First());
+            arr.Remove(arr.Last());
+            Console.WriteLine(new string(arr.ToArray()));
+            
+            var idConvert = Guid.Parse(new string(arr.ToArray()));
+            
+            user.Id = idConvert;
             return user;
         }
         catch (Exception e)
         {
+            Console.WriteLine("EXCEÇÂO "+e.Message);
             return null;
         }
     }
@@ -79,7 +91,7 @@ public class CookieAuthenticationProvider : AuthenticationStateProvider,ICookieA
                 .Where(x => x.Key != ClaimTypes.Name && x.Key != ClaimTypes.Email)
                 .Select(x => new Claim(x.Key, x.Value)));
         
-        RoleClaim[]? roleClaims = await GetRoleClaim();
+        var roleClaims = await GetRoleClaim();
         if(roleClaims is null)
             return claims;
         
@@ -94,13 +106,12 @@ public class CookieAuthenticationProvider : AuthenticationStateProvider,ICookieA
 
     private async Task<RoleClaim[]?> GetRoleClaim()
     {
-        RoleClaim[]? roleClaims;
         try
         {
-            roleClaims = await _httpClient.GetFromJsonAsync<RoleClaim[]>("/v1/Identity/Roles",default);
+            var roleClaims = await _httpClient.GetFromJsonAsync<RoleClaim[]>("/v1/Identity/Roles",CancellationToken.None);
             return roleClaims;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return null;
         }

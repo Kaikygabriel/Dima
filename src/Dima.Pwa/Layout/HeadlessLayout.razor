@@ -1,6 +1,7 @@
-@using MudBlazor.Utilities
+@using Dima.Pwa.Security
 @inherits LayoutComponentBase
-
+@inject ICookieAuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Nav
 
 <MudThemeProvider @ref="_mudThemeProvider" Theme="Configuration.Theme" @bind-IsDarkMode="_isDarkMode"/>
 
@@ -18,6 +19,13 @@
 @code {
     private bool _isDarkMode;
     private MudThemeProvider _mudThemeProvider = null!;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var userAuth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (userAuth.User.Identity is {IsAuthenticated : true})
+            Nav.NavigateTo("/");
+    }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

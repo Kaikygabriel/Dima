@@ -33,8 +33,8 @@ public static class EndPointBase
 
         endpoints.MapGroup("v1/Identity")
             .Map<LogoutEndPoint>()
-            .Map<GetRolesEndPoint>();
-           // .Map<GetInfoId>();
+            .Map<GetRolesEndPoint>()
+            .Map<GetInfoId>();
         
         endpoints.MapGroup("v1/Identity")
             .MapIdentityApi<User>();

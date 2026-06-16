@@ -7,31 +7,31 @@ using MudBlazor;
 
 namespace Dima.Pwa.Pages.Identity;
 
-public partial class RegisterPage : ComponentBase
+public partial class LoginPage : ComponentBase
 {
+    protected bool IsBusy;
     protected UserIdentity Model = new();
-    protected string[] Errors = [];
-    protected bool IsBusy ;
-    
+
+    [Inject]
+    public NavigationManager Nav { get; set; } = null!;
+
     [Inject]
     public ISnackbar Snackbar { get; set; } = null!;
-    
-    [Inject]
-    public IUserHandler UserHandler { get;private set; }= null!;
-    
-    [Inject]
-    public NavigationManager Nav { get;private set; } = null!;
 
+    [Inject]
+    public IUserHandler UserHandler { get; set; } = null!;
+    
     [Inject]
     public ICookieAuthenticationStateProvider AuthenticationStateProvider { get; private set; } = null!;
-
+    
     protected override async Task OnInitializedAsync()
     {
         var userAuth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (userAuth.User.Identity is {IsAuthenticated : true})
             Nav.NavigateTo("/");
     }
-
+    
+    
     protected async Task TryOnValidSubmitAsync()
     {
         try
@@ -51,20 +51,11 @@ public partial class RegisterPage : ComponentBase
 
     private async Task Handler()
     {
-        var user = new RegisterRequest(Model.Email, Model.Password);
-
-        var resultRegister = await UserHandler.RegisterAsync(user);
-        if (!resultRegister.IsSuccess)
-        {
-            ShowError(resultRegister.Data ?? "Ocorreu um erro ao tentar registrar o usuário ! ");
-            return;
-        }
-
         var userLogin = new LoginRequest(Model.Email,Model.Password);
         var resultLogin = await UserHandler.LoginAsync(userLogin);
         if (!resultLogin.IsSuccess)
         {
-            Nav.NavigateTo("/Loigin");
+            ShowError(resultLogin.Data ?? "Ocorreu um erro ao tentar logar o usuário ! ");
             return;
         }
         
@@ -76,9 +67,8 @@ public partial class RegisterPage : ComponentBase
     
     private void ShowError(string message)
         => Snackbar.Add(message, Severity.Error, config =>
-            {
-                config.ShowCloseIcon = true;
-                config.VisibleStateDuration = 4000; // 4 segundos visível
-            });
-    
+        {
+            config.ShowCloseIcon = true;
+            config.VisibleStateDuration = 4000; // 4 segundos visível
+        });
 }

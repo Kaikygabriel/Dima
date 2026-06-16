@@ -11,7 +11,11 @@ builder.AddConfigurationLogging();
 builder.AddSecurity();
 builder.AddCors();
 builder.Services.AddDocumentation();
-
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
 builder.Services.AddScoped<
     IUserClaimsPrincipalFactory<User>,
     CustomClaimsPrincipalFactory>();
