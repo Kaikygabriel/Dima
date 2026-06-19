@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using Dima.Pwa.Components
 @using Dima.Pwa.Components.Identity
 @inherits LayoutComponentBase
 
@@ -17,14 +18,7 @@
             </MudAppBar>
     
             <MudDrawer @bind-Open="@_open" Elevation="1">
-                <MudDrawerHeader>
-                    <MudText Typo="Typo.h6">My App</MudText>
-                </MudDrawerHeader>
-                <MudNavMenu>
-                    <MudNavLink Match="NavLinkMatch.All">Store</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.All">Library</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.All">Community</MudNavLink>
-                </MudNavMenu>
+                <NavMenu />
             </MudDrawer>
     
             <MudMainContent>
@@ -43,11 +37,10 @@
 
 
 @code{
-    private bool _open = false;
+    private bool _open;
     private MudThemeProvider _providerTheme = null!;
     private bool _isDarkMode;
     
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if(firstRender)
