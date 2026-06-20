@@ -52,9 +52,9 @@ internal sealed class CategoryHandler : ICategoryHandler
     {
         if (await _appDbContext.Categories.AnyAsync(x => x.Title == request.Title,cancellationToken))
             return new Error("Category.Exists", "The title in category already exists !");
-        
+
         var category = new Category(request.Title, request.Description,request.UserId);
-        _appDbContext.Add(category);
+        _appDbContext.Categories.Add(category);
         await _appDbContext.SaveChangesAsync(cancellationToken);
 
         return category;

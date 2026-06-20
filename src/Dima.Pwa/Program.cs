@@ -21,7 +21,10 @@ builder.Services.AddScoped<ICookieAuthenticationStateProvider, CookieAuthenticat
 
 builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthenticationProvider>();
 builder.Services.AddScoped(x => (ICookieAuthenticationStateProvider )x.GetRequiredService<AuthenticationStateProvider>());
+
 builder.Services.AddScoped<IUserHandler,UserHandler>();
+builder.Services.AddScoped<ICategoryHandler,CategoryHandler>();
+builder.Services.AddScoped<ITransactionHandler,TransactionHandler>();
 builder.Services.AddMudServices();
 
 builder.Services.AddHttpClient(Configuration.HttpClientName, x =>

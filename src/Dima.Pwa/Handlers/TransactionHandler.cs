@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using Dima.Core.Commum.Extensions;
 using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Transaction;
@@ -9,6 +10,7 @@ namespace Dima.Pwa.Handlers;
 public class TransactionHandler : ITransactionHandler
 {
     private readonly HttpClient _client;
+    private const string FormatDate = "yyyy-MM-dd";
     
     public TransactionHandler(IHttpClientFactory clientFactory)
     {
@@ -17,9 +19,10 @@ public class TransactionHandler : ITransactionHandler
     
     public async Task<PagedResponse<IEnumerable<Transaction>>> GetAllByCreateAt(GetTransactionsRequest request, CancellationToken cancellationToken = default)
     {
-        var endPoint = $"/Transaction/v1/ByCreate/{request.UserId}/{request.Page}/{request.PageSize}";
-        if (request.Start is not null && request.End is not null)
-            endPoint += $"?Start={request.Start}&End={request.End}";
+        var start = (request.Start ?? DateTime.UtcNow.GetFirstDayOfMonth()).ToString(FormatDate);
+        var end = (request.Start ?? DateTime.UtcNow.GetLastDayOfMonth()).ToString(FormatDate);
+        
+         var endPoint = $"/Transaction/v1/ByCreate/{request.UserId}/{request.Page}/{request.PageSize}?Start={start}&End={end}";
         
         var responseApi = await _client.GetAsync(endPoint, cancellationToken);
 
@@ -27,17 +30,15 @@ public class TransactionHandler : ITransactionHandler
         if(response is null && !responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
         
-        if(!response!.IsSuccess)
-            return response.Error ??new Error("Invalid", "Invalid");
-        
-        return response;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<PagedResponse<IEnumerable<Transaction>>> GetAllByPaidOrReceivedAt(GetTransactionsRequest request, CancellationToken cancellationToken = default)
     {
-        var endPoint = $"/Transaction/v1/ByPaid/{request.UserId}/{request.Page}/{request.PageSize}";
-        if (request.Start is not null && request.End is not null)
-            endPoint += $"?Start={request.Start}&End={request.End}";
+        var start = (request.Start ?? DateTime.UtcNow.GetFirstDayOfMonth()).ToString(FormatDate);
+        var end = (request.Start ?? DateTime.UtcNow.GetLastDayOfMonth()).ToString(FormatDate);
+        
+        var endPoint = $"/Transaction/v1/ByPaid/{request.UserId}/{request.Page}/{request.PageSize}?Start={start}&End={end}";
         
         var responseApi = await _client.GetAsync(endPoint, cancellationToken);
 
@@ -45,10 +46,7 @@ public class TransactionHandler : ITransactionHandler
         if(response is null && !responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
         
-        if(!response!.IsSuccess)
-            return response.Error ??new Error("Invalid", "Invalid");
-        
-        return response;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Transaction>> GetById(GetTransactionsByIdRequest request, CancellationToken cancellationToken = default)
@@ -60,10 +58,7 @@ public class TransactionHandler : ITransactionHandler
         if(response is null && !responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
         
-        if(!response!.IsSuccess)
-            return response.Error ??new Error("Invalid", "Invalid");
-        
-        return response.Data;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Transaction>> Create(CreateTransactionRequest request, CancellationToken cancellationToken = default)
@@ -74,11 +69,8 @@ public class TransactionHandler : ITransactionHandler
         var response = await responseApi.Content.ReadFromJsonAsync<Response<Transaction>>(cancellationToken);
         if (response is null && !responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
-        
-        if (!response!.IsSuccess)
-            return response.Error ?? new Error("Invalid", "Invalid");;
 
-        return response.Data;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Transaction>> Update(UpdateTransactionRequest request, CancellationToken cancellationToken = default)
@@ -89,11 +81,8 @@ public class TransactionHandler : ITransactionHandler
         var response = await responseApi.Content.ReadFromJsonAsync<Response<Transaction>>(cancellationToken);
         if (response is null && !responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
-        
-        if (!response!.IsSuccess)
-            return response.Error ?? new Error("Invalid", "Invalid");;
 
-        return response.Data;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Transaction>> Delete(DeleteTransactionRequest request, CancellationToken cancellationToken = default)
@@ -104,10 +93,7 @@ public class TransactionHandler : ITransactionHandler
         var response = await responseApi.Content.ReadFromJsonAsync<Response<Transaction>>(cancellationToken);
         if (response is null && !responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
-        
-        if (!response!.IsSuccess)
-            return response.Error ?? new Error("Invalid", "Invalid");;
 
-        return response.Data;
+        return response ?? new Error("Invalid","Invalid");
     }
 }

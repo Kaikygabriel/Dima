@@ -19,17 +19,12 @@ public class CategoryHandler : ICategoryHandler
     {
         var endPoint = $"/Categories/v1/{request.Id}/{request.UserId}";
         var responseRequest = await _client.GetAsync(endPoint,cancellationToken);
-        if (!responseRequest.IsSuccessStatusCode)
-            return new Error("Invalid","Invalid");
-
         var response = await responseRequest.Content.ReadFromJsonAsync<Response<Category>>(cancellationToken);
-        if(response is null)
+      
+        if (!responseRequest.IsSuccessStatusCode && response is null)
             return new Error("Invalid","Invalid");
         
-        if (!response.IsSuccess)
-            return response.Error!;
-
-        return response;
+        return response ?? new Error("Invalid","Invalid");;
     }
 
     public async Task<PagedResponse<List<Category>>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default)
@@ -37,31 +32,28 @@ public class CategoryHandler : ICategoryHandler
         var endPoint = $"/categories/v1/{request.UserId}/{request.Page}/{request.PageSize}";
         
         var responseRequest = await _client.GetAsync(endPoint,cancellationToken);
-        if (!responseRequest.IsSuccessStatusCode)
-            return new Error("Invalid","Invalid");
 
         var response = await responseRequest.Content.ReadFromJsonAsync<PagedResponse<List<Category>>>(cancellationToken);
-        if(response is null)
+        if (!responseRequest.IsSuccessStatusCode && response is null)
             return new Error("Invalid","Invalid");
-        
-        if (!response.IsSuccess)
-            return response.Error!;
 
-        return response;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Category>> Create(CreateCategoryRequest request, CancellationToken cancellationToken = default)
     {
         var endPoint = "/Categories/v1";
+        
+        Console.WriteLine(request.Description);
+        Console.WriteLine(request.Title);
+        
         var responseRequest = await _client.PostAsJsonAsync(endPoint, request, cancellationToken);
 
         var result = await responseRequest.Content.ReadFromJsonAsync<Response<Category>>(cancellationToken);
         if (result is null && !responseRequest.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
-        if (!result!.IsSuccess)
-            return result.Error ?? new ("Invalid","Invalid");
 
-        return result.Data!;
+        return result ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Category>> Update(UpdateCategoryRequest request, CancellationToken cancellationToken = default)
@@ -72,10 +64,8 @@ public class CategoryHandler : ICategoryHandler
         var result = await responseRequest.Content.ReadFromJsonAsync<Response<Category>>(cancellationToken);
         if (result is null && !responseRequest.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
-        if (!result!.IsSuccess)
-            return result.Error ?? new ("Invalid","Invalid");
 
-        return result.Data!;
+        return result ?? new Error("Invalid","Invalid");
     }
 
     public async Task<Response<Category>> Delete(DeleteCategoryRequest request, CancellationToken cancellationToken = default)
@@ -86,10 +76,7 @@ public class CategoryHandler : ICategoryHandler
         var result = await responseRequest.Content.ReadFromJsonAsync<Response<Category>>(cancellationToken);
         if (result is null && !responseRequest.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
-        
-        if (!result!.IsSuccess)
-            return result.Error ?? new ("Invalid","Invalid");
 
-        return result.Data!;
+        return result ?? new Error("Invalid","Invalid");
     }
 }

@@ -1,0 +1,39 @@
+@page "/Categories/Create"
+@inherits CreateCategoryPage
+
+<MudText Typo="Typo.h2" Align="Align.Center" Color="Color.Primary" >Create Category</MudText>
+<MudGrid Justify="Justify.Center">
+    <MudItem xl="8" sm="11">
+        <MudPaper Class="pa-4" >
+            <EditForm OnValidSubmit="OnValidSubmit" Model="Model" Spacing="4">
+                <MudTextField
+                    T="string"
+                    InputType="InputType.Text"
+                    Label="Title"
+                    For="@(() => Model.Title)"
+                    Required="true"
+                    @bind-Value="Model.Title"/>
+                <MudTextField
+                    T="string"
+                    InputType="InputType.Text"
+                    Label="Description"
+                    For="@(() => Model.Description)"
+                    Required="true"
+                    Lines="3"
+                    @bind-Value="Model.Description"/>
+                                
+                <div class="mt-10 d-flex justify-center flex-row ">
+                    @if (IsBusy)
+                    {
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="36px"/>
+                    }
+                    else
+                    {
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Create</MudButton>
+                    }
+                </div>
+                
+            </EditForm>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
