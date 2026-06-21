@@ -46,6 +46,6 @@ public class CreateCategoryPage : ComponentBase
             Snackbar.Add(result.Error?.Message ?? "Error", Severity.Error);
             return;
         }
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/categories");
     }
 }

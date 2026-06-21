@@ -19,10 +19,10 @@ public class Response<T>
     {
         Error = error;
     }
-    public T? Data { get; private init; }
-    public Error? Error { get; private init; }
+    public T? Data { get; set; }
+    public Error? Error { get; set; }
     [JsonIgnore]
-    public bool IsSuccess { get;private init; }
+    public bool IsSuccess { get;set; }
 
     public static Response<T> Failure(Error error) => new (error);
     public static Response<T> Success(T value) => new(value);
