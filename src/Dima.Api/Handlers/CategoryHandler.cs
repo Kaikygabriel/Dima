@@ -35,7 +35,7 @@ internal sealed class CategoryHandler : ICategoryHandler
             .Where(x => x.UserId == request.UserId);
         
         var categories = await query
-            .Skip(request.Page * request.PageSize)
+            .Skip((request.Page  - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
         

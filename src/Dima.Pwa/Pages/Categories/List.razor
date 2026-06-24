@@ -26,49 +26,72 @@
     }
     else
     {
-        <MudGrid Spacing="4">
+        <MudDataGrid Items="@Categories"
+                     Hover="true"
+                     Dense="true"
+                     Bordered="true"
+                     Striped="true"
+                     QuickFilter="SearchFunc"
+                     Hideable="true">
 
-            @foreach (var category in Categories)
-            {
-                <MudItem xs="12" sm="6" md="4" lg="3">
+            <ToolBarContent>
+                <MudTextField  @bind-Value="SearchTitle"
+                               Placeholder="Filter Title"
+                               Adornment="Adornment.Start"
+                               AdornmentIcon="@Icons.Material.Filled.Search"
+                               Immediate="true"
+                               IconSize="Size.Medium"
+                               Class="mt-0"
+                               ></MudTextField>
+            </ToolBarContent>
+            <Columns>
 
-                    <MudPaper Elevation="4"
-                              Class="pa-5 d-flex flex-column justify-space-between"
-                              Style="height:180px;border-radius:12px;">
+                <PropertyColumn Property="x => x.Id" Title="Id"/>
+                <PropertyColumn Property="x => x.Title" Title="Título"/>
 
-                        <div>
+                <PropertyColumn Property="x => x.Description" Title="Descrição"/>
 
-                            <MudText Typo="Typo.h5"
-                                     Color="Color.Primary">
-                                @category.Title
-                            </MudText>
+                <TemplateColumn Title="Ações">
 
-                            <MudDivider Class="my-2"/>
+                    <CellTemplate>
 
-                            <MudText Typo="Typo.body2">
-                                @category.Description
-                            </MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                       Color="Color.Primary"/>
 
-                        </div>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Href=""/>
 
-                        <MudStack Row="true"
-                                  Justify="Justify.FlexEnd"
-                                  Class="mt-4">
+                    </CellTemplate>
 
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                           Color="Color.Primary"/>
+                </TemplateColumn>
 
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                           Color="Color.Error"/>
+            </Columns>
+            <Columns>
 
-                        </MudStack>
+                <PropertyColumn Property="x => x.Id" Title="Id"/>
+                <PropertyColumn Property="x => x.Title" Title="Título"/>
 
-                    </MudPaper>
+                <PropertyColumn Property="x => x.Description" Title="Descrição"/>
 
-                </MudItem>
-            }
+                <TemplateColumn Title="Ações">
 
-        </MudGrid>
+                    <CellTemplate>
+
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                       Color="Color.Primary"/>
+
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Href=""/>
+
+                    </CellTemplate>
+
+                </TemplateColumn>
+
+            </Columns>
+
+        </MudDataGrid>
 
         <MudStack AlignItems="AlignItems.Center" Class="mt-8">
 

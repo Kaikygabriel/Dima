@@ -3,7 +3,6 @@ using Dima.Core.Models;
 using Dima.Core.Requests.Category;
 using Dima.Pwa.Security;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace Dima.Pwa.Pages.Categories;
@@ -18,22 +17,22 @@ public partial class ListPage : ComponentBase
     protected List<Category> Categories = [];
     
     [Inject]
-    private ICookieAuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
-    
-    [Inject]
-    public NavigationManager Nav { get; set; } = null!;
+    private ICookieAuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+
     [Inject] 
     public ICategoryHandler CategoryHandler { get; set; } = null!;
     [Inject]
     public ISnackbar Snackbar { get; set; } = null!;
 
+    protected string SearchTitle = "";
+        
     protected override async Task OnInitializedAsync()
     {
-        CurrentPage = 0;
+        CurrentPage = 1;
         await GetCategories(CurrentPage);
     }
 
-    public async Task GetCategories(int page)
+    protected async Task GetCategories(int page)
     {
         try
         {
@@ -54,12 +53,26 @@ public partial class ListPage : ComponentBase
 
             TotalPage = result.PageTotal;
             CurrentPage = result.CurrentPage;
-            Console.WriteLine(result.CurrentPage);
-            Categories = result.Data;
+            
+            Categories = result.Data!;
         }
         catch (Exception e)
         {
             Snackbar.Add(e.Message , Severity.Error);
         }
     }
+
+    public Func<Category, bool> SearchFunc => x =>
+    {
+        if (string.IsNullOrEmpty(SearchTitle))
+            return true;
+
+        if (x.Title.Equals(SearchTitle, StringComparison.CurrentCultureIgnoreCase))
+            return true;
+
+        if (x.Title.Contains(SearchTitle))
+            return true;
+
+        return false;
+    };
 }
