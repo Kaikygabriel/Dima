@@ -3,7 +3,7 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
 
-    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
+    <MudStack  Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
         <MudText Typo="Typo.h3">
             Categories
         </MudText>
@@ -36,13 +36,12 @@
 
             <ToolBarContent>
                 <MudTextField  @bind-Value="SearchTitle"
-                               Placeholder="Filter Title"
-                               Adornment="Adornment.Start"
-                               AdornmentIcon="@Icons.Material.Filled.Search"
-                               Immediate="true"
-                               IconSize="Size.Medium"
-                               Class="mt-0"
-                               ></MudTextField>
+                           Placeholder="Filter Title"
+                           Adornment="Adornment.Start"
+                           AdornmentIcon="@Icons.Material.Filled.Search"
+                           Immediate="true"
+                           IconSize="Size.Medium"
+                           Class="mt-0"/>
             </ToolBarContent>
             <Columns>
 
@@ -56,41 +55,20 @@
                     <CellTemplate>
 
                         <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                       Color="Color.Primary"/>
+                                       Color="Color.Primary"
+                                       aria-label="Atualizar"
+                                       Href="@($"/Categories/Edit/{context.Item.Id}")"/>
 
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                        Color="Color.Error"
-                                       Href=""/>
+                                       aria-label="Excluir"
+                                       />
 
                     </CellTemplate>
 
                 </TemplateColumn>
 
             </Columns>
-            <Columns>
-
-                <PropertyColumn Property="x => x.Id" Title="Id"/>
-                <PropertyColumn Property="x => x.Title" Title="Título"/>
-
-                <PropertyColumn Property="x => x.Description" Title="Descrição"/>
-
-                <TemplateColumn Title="Ações">
-
-                    <CellTemplate>
-
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                       Color="Color.Primary"/>
-
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                       Color="Color.Error"
-                                       Href=""/>
-
-                    </CellTemplate>
-
-                </TemplateColumn>
-
-            </Columns>
-
         </MudDataGrid>
 
         <MudStack AlignItems="AlignItems.Center" Class="mt-8">
