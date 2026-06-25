@@ -1,9 +1,10 @@
 @page "/Categories"
 @inherits ListPage
 
+
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
 
-    <MudStack  Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
+    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
         <MudText Typo="Typo.h3">
             Categories
         </MudText>
@@ -35,13 +36,13 @@
                      Hideable="true">
 
             <ToolBarContent>
-                <MudTextField  @bind-Value="SearchTitle"
-                           Placeholder="Filter Title"
-                           Adornment="Adornment.Start"
-                           AdornmentIcon="@Icons.Material.Filled.Search"
-                           Immediate="true"
-                           IconSize="Size.Medium"
-                           Class="mt-0"/>
+                <MudTextField @bind-Value="SearchTitle"
+                              Placeholder="Filter Title"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Immediate="true"
+                              IconSize="Size.Medium"
+                              Class="mt-0"/>
             </ToolBarContent>
             <Columns>
 
@@ -62,7 +63,8 @@
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                        Color="Color.Error"
                                        aria-label="Excluir"
-                                       />
+                                       OnClick="@(() => OnDeleteClickedAsync(context.Item.Id, context.Item.Title))"
+                        />
 
                     </CellTemplate>
 

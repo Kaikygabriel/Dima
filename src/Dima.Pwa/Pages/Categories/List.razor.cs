@@ -1,6 +1,7 @@
 using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Category;
+using Dima.Core.Response;
 using Dima.Pwa.Security;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -18,6 +19,9 @@ public partial class ListPage : ComponentBase
     
     [Inject]
     private ICookieAuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+    
+    [Inject]
+    private IDialogService DialogService{ get; set; } = null!;
 
     [Inject] 
     public ICategoryHandler CategoryHandler { get; set; } = null!;
@@ -31,7 +35,40 @@ public partial class ListPage : ComponentBase
         CurrentPage = 1;
         await GetCategories(CurrentPage);
     }
+    
+    protected async void OnDeleteClickedAsync(Guid id,string title)
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBoxAsync($"Excluir Categoria","Voce Deseja Excluir A categoria " +title,
+                "Deletar","Cancelar") ?? false;
+            if (!result)
+                return;
+            
+            var resultRemove = await DeleteAsync(id);
+            if (!resultRemove.IsSuccess)
+            {
+                Snackbar.Add(resultRemove.Error?.Message ?? "Error", Severity.Error);
+                return;
+            }
 
+            await GetCategories(CurrentPage);
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add(e.Message, Severity.Error);
+        }
+    }
+
+    private async Task<Response<Category>> DeleteAsync(Guid idCategory)
+    {
+        var claims = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var id = Guid.Parse(claims.User.Identity!.Name!);
+        var result = await CategoryHandler.Delete(new DeleteCategoryRequest(idCategory,id));
+        return result;
+    }
+    
     protected async Task GetCategories(int page)
     {
         try
