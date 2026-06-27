@@ -1,0 +1,49 @@
+@page "/categories/edit/{Id:guid}"
+@inherits EditPage
+
+@if (Category is null)
+{
+    <MudProgressCircular/> 
+}
+else
+{
+    <MudGrid Justify="Justify.Center" Class="mt-20" >
+        <MudItem xs="11" md="8">
+            <MudPaper Class="pa-5">
+                <EditForm OnValidSubmit="OnValidSubmitAsync" Model="Category">
+                    <DataAnnotationsValidator/>
+                
+                    <MudTextField T="string"
+                                  @bind-Value="Category.Title"  
+                                  For="@(()=>Category.Title)"
+                                  Required="true"
+                                  Label="Title"
+                                  AutoFocus="true"
+                                  InputType="InputType.Text"
+                    />
+                
+                    <MudTextField T="string"
+                                  @bind-Value="Category.Description"  
+                                  For="@(()=>Category.Description!)"
+                                  Required="true"
+                                  Label="Description"
+                                  InputType="InputType.Text"
+                                  Lines="3"
+                    />
+                    
+                    <MudStack Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Row="true" Class="mt-12">
+                        @if (IsBusy)
+                        {
+                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="36px"/>
+                        }
+                        else
+                        {
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Edit</MudButton>
+                        }
+                    </MudStack>
+                    
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>    
+}

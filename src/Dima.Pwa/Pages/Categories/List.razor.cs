@@ -52,7 +52,6 @@ public partial class ListPage : ComponentBase
                 return;
             }
 
-            await GetCategories(CurrentPage);
             StateHasChanged();
         }
         catch (Exception e)
@@ -66,6 +65,8 @@ public partial class ListPage : ComponentBase
         var claims = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var id = Guid.Parse(claims.User.Identity!.Name!);
         var result = await CategoryHandler.Delete(new DeleteCategoryRequest(idCategory,id));
+        
+        Categories.RemoveAll(x => x.Id == idCategory);
         return result;
     }
     

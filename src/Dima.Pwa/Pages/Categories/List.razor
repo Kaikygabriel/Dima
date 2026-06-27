@@ -46,8 +46,16 @@
             </ToolBarContent>
             <Columns>
 
-                <PropertyColumn Property="x => x.Id" Title="Id"/>
-                <PropertyColumn Property="x => x.Title" Title="Título"/>
+                <TemplateColumn Title="Id">
+                    <CellTemplate >
+                        <MudLink Href="@($"/categories/details/{context.Item.Id}")"
+                                 Typo="Typo.body2">
+                            @context.Item.Id
+                        </MudLink>
+                    </CellTemplate>
+                </TemplateColumn>
+                
+                <PropertyColumn Property="x => x.Title"  Title="Título"/>
 
                 <PropertyColumn Property="x => x.Description" Title="Descrição"/>
 
@@ -58,7 +66,7 @@
                         <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                        Color="Color.Primary"
                                        aria-label="Atualizar"
-                                       Href="@($"/Categories/Edit/{context.Item.Id}")"/>
+                                       Href="@($"/categories/edit/{context.Item.Id}")"/>
 
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                        Color="Color.Error"
