@@ -14,7 +14,19 @@ public class CategoryHandler : ICategoryHandler
     {
         _client = clientFactory.CreateClient(Configuration.HttpClientName);
     }
-    
+
+    public async Task<IEnumerable<GetCategoryCreateTransaction>?> GetAllCategoryToCreateTransaction(Guid userId, CancellationToken cancellationToken)
+    {
+        var endPoint = $"Transaction/v1/All/create/transactions/{userId}";
+        var responseRequest = await _client.GetAsync(endPoint,cancellationToken);
+        var response = await responseRequest.Content.ReadFromJsonAsync<List<GetCategoryCreateTransaction>>(cancellationToken);
+      
+        if (!responseRequest.IsSuccessStatusCode && response is null)
+            return null;
+        
+        return response;
+    }
+
     public async Task<Response<Category>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default)
     {
         var endPoint = $"/Categories/v1/{request.Id}/{request.UserId}";
@@ -24,7 +36,7 @@ public class CategoryHandler : ICategoryHandler
         if (!responseRequest.IsSuccessStatusCode && response is null)
             return new Error("Invalid","Invalid");
         
-        return response ?? new Error("Invalid","Invalid");;
+        return response ?? new Error("Invalid","Invalid");
     }
 
     public async Task<PagedResponse<List<Category>>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default)

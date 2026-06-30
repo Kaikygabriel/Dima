@@ -29,7 +29,8 @@ public static class EndPointBase
             .Map<DeleteTransactionEndPoint>()
             .Map<GetByIdTransactionEndPoint>()
             .Map<GetAllTransactionsByPaidEndPoint>()
-            .Map<GetAllTransactionsByCreateAtEndPoint>();
+            .Map<GetAllTransactionsByCreateAtEndPoint>()
+            .Map<GetAllCategoryByCreateTransactionEndPoint>();
 
         endpoints.MapGroup("v1/Identity")
             .Map<LogoutEndPoint>()

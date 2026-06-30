@@ -6,6 +6,7 @@ namespace Dima.Core.Handler;
 
 public interface ICategoryHandler
 {
+    Task<IEnumerable<GetCategoryCreateTransaction>?> GetAllCategoryToCreateTransaction(Guid userId,CancellationToken cancellationToken);
     Task<Response<Category>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default);
     Task<PagedResponse<List<Category>>> GetAll(GetAllCategoryRequest request, CancellationToken cancellationToken = default);
     

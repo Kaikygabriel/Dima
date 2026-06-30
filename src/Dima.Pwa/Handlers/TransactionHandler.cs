@@ -63,14 +63,13 @@ public class TransactionHandler : ITransactionHandler
 
     public async Task<Response<Transaction>> Create(CreateTransactionRequest request, CancellationToken cancellationToken = default)
     {
-        var endPoint = "Transaction/v1";
+        var endPoint = "/Transaction/v1";
         var responseApi = await _client.PostAsJsonAsync(endPoint, request, cancellationToken);
-
-        var response = await responseApi.Content.ReadFromJsonAsync<Response<Transaction>>(cancellationToken);
-        if (response is null && !responseApi.IsSuccessStatusCode)
+        
+        if (!responseApi.IsSuccessStatusCode)
             return new Error("Invalid", "Invalid");
 
-        return response ?? new Error("Invalid","Invalid");
+        return Response<Transaction>.Success();
     }
 
     public async Task<Response<Transaction>> Update(UpdateTransactionRequest request, CancellationToken cancellationToken = default)

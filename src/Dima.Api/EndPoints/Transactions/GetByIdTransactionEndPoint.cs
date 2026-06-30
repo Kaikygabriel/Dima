@@ -16,6 +16,6 @@ public class GetByIdTransactionEndPoint : IEndPoint
             return response.IsSuccess ? 
                 Results.Ok(response) :
                 Results.BadRequest(response);
-        });
+        }).WithName("GetTransaction");
     }
 }

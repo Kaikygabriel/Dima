@@ -16,6 +16,15 @@ internal sealed class CategoryHandler : ICategoryHandler
         _appDbContext = appDbContext;
     }
 
+    public async Task<IEnumerable<GetCategoryCreateTransaction>> GetAllCategoryToCreateTransaction(Guid userId, CancellationToken cancellationToken)
+    {
+        return await _appDbContext
+            .Categories
+            .Where(x=>x.UserId == userId)
+            .Select(x=> new GetCategoryCreateTransaction(x.Id,x.Title))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Response<Category>> GetById(GetCategoryByIdRequest request, CancellationToken cancellationToken = default)
     {
         var category = await _appDbContext.Categories

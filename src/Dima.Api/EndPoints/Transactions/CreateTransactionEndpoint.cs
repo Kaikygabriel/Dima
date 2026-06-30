@@ -15,7 +15,13 @@ public class CreateTransactionEndpoint : IEndPoint
         {
             request.UserId = Guid.Parse(claim.Identity!.Name!);
             var result = await handler.Create(request,can);
-            return result.IsSuccess ? Results.Created() : Results.BadRequest(result);
+            return result.IsSuccess ? Results.CreatedAtRoute(
+                "GetTransaction",
+                new
+                {
+                    id = result.Data!.Id,
+                    userId = result.Data!.UserId
+                }) : Results.BadRequest(result);
         });
     }
 }

@@ -3,10 +3,16 @@ using Dima.Core.Enum;
 
 namespace Dima.Core.Requests.Transaction;
 
-public record CreateTransactionRequest(
-    [Required]string Title,
-    [Required]ETypeTransaction Type,
-    [Required]decimal Amount,
-    [Required]Guid CategoryId,
-    [Required]DateTime? PaidOrReceivedAt)
-    : Request;
+public record CreateTransactionRequest
+    : Request
+{
+    [Required]
+    public string Title { get; set; }= null!;
+    [Required]
+    public ETypeTransaction Type { get;set; } 
+     [Required]
+    public decimal Amount { get; set; } 
+    [Required]
+    public Guid CategoryId { get; set; }
+    public DateTime? PaidOrReceivedAt { get; set; } 
+}

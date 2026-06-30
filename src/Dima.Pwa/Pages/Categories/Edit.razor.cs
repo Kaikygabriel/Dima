@@ -29,7 +29,7 @@ public partial class  EditPage : ComponentBase
     
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(3000);
+
         var user = await CookieAuthenticationStateProvider.GetAuthenticationStateAsync();
         var idTryParse = Guid.TryParse(user.User.Identity?.Name,out Guid idUser);
         if (!idTryParse)
@@ -40,6 +40,7 @@ public partial class  EditPage : ComponentBase
 
         _userId = idUser;
         var response = await CategoryHandler.GetById(new GetCategoryByIdRequest(Id) { UserId =  _userId});
+        
         if (!response.IsSuccess || response.Data is null)
         {
             Nav.NavigateTo("/categories");
@@ -68,7 +69,7 @@ public partial class  EditPage : ComponentBase
                 return;
             }
 
-            Nav.NavigateTo("/Categories");
+            Nav.NavigateTo("/categories");
         }
         catch (Exception e)
         {
