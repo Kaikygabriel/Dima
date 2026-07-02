@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Dima.Api.Interfaces.Endpoint;
 using Dima.Core.Handler;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@ public class GetAllCategoryByCreateTransactionEndPoint : IEndPoint
 {
     public static void Map(IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/v1/All/create/transactions/{userId:guid}", async
+        builder.MapGet("/v1/{userId:guid}", async
         (
             [FromRoute]Guid userId,
             CancellationToken cancellationToken, 

@@ -6,7 +6,7 @@ public static class AppExtension
     {
         app.MapOpenApi();
         app.UseSwaggerUI(x=>x.SwaggerEndpoint("/openapi/v1.json","Dima v1"));
-        app.UseExceptionHandler();
+       // app.UseExceptionHandler();
         
         return app;
     }

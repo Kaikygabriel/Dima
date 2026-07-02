@@ -1,5 +1,4 @@
 @page "/transactions/create"
-@using System.Globalization
 @using Dima.Core.Enum
 @inherits CreatePage
 
@@ -21,7 +20,9 @@ else
                     Label="Title"
                     For="@(() => Request.Title)"
                     Required="true"
-                    @bind-Value="Request.Title"/>
+                    @bind-Value="Request.Title"
+                    Class="mb-4"
+                    />
                 
                 <MudTextField
                     T="decimal"
@@ -30,24 +31,24 @@ else
                     For="@(() => Request.Amount)"
                     Required="true"
                     Format="C"
-                    Culture="@(new CultureInfo("pt-br"))" 
+                    Class="mb-4"
                     @bind-Value="Request.Amount"/>
               
                 <MudDatePicker Label="Data (opcional)" 
                      Required="false" 
                      Editable="true"
                      Mask="@(new DateMask("dd-MM-yyyy"))"
-                     DateFormat="dd-MM-yyyy" 
-                     Culture="@(new CultureInfo("pt-br"))" 
+                     DateFormat="dd-MM-yyyy"
+                     Class="mb-4"
                      @bind-Date="Request.PaidOrReceivedAt" />
 
                 
-                <MudSelect T="@(ETypeTransaction)" Label="Select a Type Transaction" AnchorOrigin="Origin.BottomCenter" @bind-Value="Request.Type">
+                <MudSelect Class="mb-4" T="@(ETypeTransaction)" Label="Select a Type Transaction" AnchorOrigin="Origin.BottomCenter" @bind-Value="Request.Type">
                     <MudSelectItem Value="@(ETypeTransaction.In)" >Entrada</MudSelectItem>
                     <MudSelectItem Value="@(ETypeTransaction.Out)">Saida</MudSelectItem>
                 </MudSelect>
 
-                <MudSelect T="Guid" Label="Select a Category"  @bind-Value="@Request.CategoryId">
+                <MudSelect T="Guid" Label="Select a Category" AnchorOrigin="Origin.BottomCenter"  @bind-Value="@Request.CategoryId">
                 @foreach (var category in Categories)
                 {
                     <MudSelectItem Value="@category.CategoryId" >@category.Title</MudSelectItem>

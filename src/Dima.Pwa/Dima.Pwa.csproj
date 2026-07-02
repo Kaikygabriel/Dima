@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,10 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dima.Core\Dima.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,19 +9,15 @@ public class GetAllTransactionsByCreateAtEndPoint : IEndPoint
 {
     public static void Map(IEndpointRouteBuilder builder)
     {
-        builder.MapGet("v1/ByCreate/{userId:guid}/{page:int}/{pageSize}", async (
+        builder.MapGet("v1/ByCreate/{userId:guid}", async (
             [FromQuery]DateTime? start,
             [FromQuery]DateTime? end,
-            int page ,
-            int pageSize ,
             Guid userId,
             ITransactionHandler handler,
             CancellationToken cl) =>
         {
             var request = new GetTransactionsRequest(start,end)
             {
-                Page = page,
-                PageSize = pageSize,
                 UserId = userId
             };
             var response = await handler.GetAllByCreateAt(request,cl);

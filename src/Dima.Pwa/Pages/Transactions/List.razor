@@ -1,4 +1,4 @@
-@page "/Categories"
+@page "/launch/history"
 @inherits ListPage
 
 
@@ -6,28 +6,47 @@
 
     <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
         <MudText Typo="Typo.h3">
-            Categories
+            Transactions
         </MudText>
 
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Add"
-                   Href="/Categories/Create">
-            New Category
+                   Href="/Transactions/Create">
+            New Transactions
         </MudButton>
     </MudStack>
 
-    @if (Categories is null || !Categories.Any())
+    @if (Transactions is null || !Transactions.Any())
     {
-        <MudAlert Severity="Severity.Info"
+        <MudAlert Severity="Severity.Error"
                   Variant="Variant.Filled"
-                  Icon="@Icons.Material.Filled.Info">
-            No categories found.
+                  Icon="@Icons.Material.Filled.Error">
+            No Transactions found.
         </MudAlert>
     }
     else
     {
-        <MudDataGrid Items="@Categories"
+        <MudStack>
+            <div>
+                <label
+                    for="start-date">Start Date</label>
+                <MudDatePicker
+                    id="start-date"
+                    Class="mt-3 mb-4"
+                    @bind-Date="Start"/>
+            </div>
+            <div>
+                <label for="end-date">End Date</label>
+                <MudDatePicker
+                    id="end-date"
+                    Class="mt-3 mb-4"
+                    @bind-Date="End"/>
+            </div>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="GetTransactions" >Filtrar </MudButton>
+        </MudStack>
+        
+        <MudDataGrid Items="@Transactions"
                      Hover="true"
                      Dense="true"
                      Bordered="true"
@@ -36,8 +55,9 @@
                      Hideable="true">
 
             <ToolBarContent>
-   
-                <MudTextField @bind-Value="SearchTitle"
+            
+                
+                <MudTextField @bind-Value="TermSearch"
                               Placeholder="Filter Title"
                               Adornment="Adornment.Start"
                               AdornmentIcon="@Icons.Material.Filled.Search"
@@ -49,7 +69,7 @@
 
                 <TemplateColumn Title="Id">
                     <CellTemplate >
-                        <MudLink Href="@($"/categories/details/{context.Item.Id}")"
+                        <MudLink Href="@($"/Transactions/details/{context.Item.Id}")"
                                  Typo="Typo.body2">
                             @context.Item.Id
                         </MudLink>
@@ -58,7 +78,15 @@
                 
                 <PropertyColumn Property="x => x.Title"  Title="Título"/>
 
-                <PropertyColumn Property="x => x.Description" Title="Descrição"/>
+                <PropertyColumn Property="x => x.EType" Title="Tipo"/>
+                
+                <PropertyColumn Format="C" Property="x => x.Amount" Title="Valor"/>
+                
+                <PropertyColumn Property="x => x.PaidOrReceivedAt" Title="Data"/>
+                
+                <PropertyColumn Property="x => x.Category.Title" Title="Categoria"/>
+                
+                <PropertyColumn Property="x => x.CreateAt" Title="Criação"/>
 
                 <TemplateColumn Title="Ações">
 
@@ -69,11 +97,11 @@
                                        aria-label="Atualizar"
                                        Href="@($"/categories/edit/{context.Item.Id}")"/>
 
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                       Color="Color.Error"
-                                       aria-label="Excluir"
-                                       OnClick="@(() => OnDeleteClickedAsync(context.Item.Id, context.Item.Title))"
-                        />
+                        @* <MudIconButton Icon="@Icons.Material.Filled.Delete" *@
+                        @*                Color="Color.Error" *@
+                        @*                aria-label="Excluir" *@
+                                       @* OnClick="@(() => OnDeleteClickedAsync(context.Item.Id, context.Item.Title))" *@
+                        @* /> *@
 
                     </CellTemplate>
 
@@ -81,19 +109,6 @@
 
             </Columns>
         </MudDataGrid>
-
-        <MudStack AlignItems="AlignItems.Center" Class="mt-8">
-
-            <MudPagination Count="@TotalPage"
-                           Color="Color.Primary"
-                           @bind-Selected="CurrentPage"
-                           @onclick="@(() => GetCategories(CurrentPage))"/>
-
-            <MudText Typo="Typo.caption" Class="mt-2">
-                Page @CurrentPage of @TotalPage
-            </MudText>
-
-        </MudStack>
     }
 
 </MudContainer>

@@ -20,9 +20,9 @@ public class TransactionHandler : ITransactionHandler
     public async Task<PagedResponse<IEnumerable<Transaction>>> GetAllByCreateAt(GetTransactionsRequest request, CancellationToken cancellationToken = default)
     {
         var start = (request.Start ?? DateTime.UtcNow.GetFirstDayOfMonth()).ToString(FormatDate);
-        var end = (request.Start ?? DateTime.UtcNow.GetLastDayOfMonth()).ToString(FormatDate);
+        var end = (request.End ?? DateTime.UtcNow.GetLastDayOfMonth()).ToString(FormatDate);
         
-         var endPoint = $"/Transaction/v1/ByCreate/{request.UserId}/{request.Page}/{request.PageSize}?Start={start}&End={end}";
+         var endPoint = $"/Transaction/v1/ByCreate/{request.UserId}?start={start}&end={end}";
         
         var responseApi = await _client.GetAsync(endPoint, cancellationToken);
 

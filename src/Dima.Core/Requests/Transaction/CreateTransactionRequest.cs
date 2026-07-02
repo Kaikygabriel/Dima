@@ -9,8 +9,8 @@ public record CreateTransactionRequest
     [Required]
     public string Title { get; set; }= null!;
     [Required]
-    public ETypeTransaction Type { get;set; } 
-     [Required]
+    public ETypeTransaction Type { get; set; } = ETypeTransaction.Out;
+    [Required]
     public decimal Amount { get; set; } 
     [Required]
     public Guid CategoryId { get; set; }

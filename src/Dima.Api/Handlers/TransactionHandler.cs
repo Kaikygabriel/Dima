@@ -1,5 +1,6 @@
 using Dima.Api.Data.Context;
 using Dima.Core.Commum.Extensions;
+using Dima.Core.Enum;
 using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Transaction;
@@ -20,7 +21,7 @@ internal sealed class TransactionHandler : ITransactionHandler
     public async Task<PagedResponse<IEnumerable<Transaction>>> GetAllByCreateAt(GetTransactionsRequest request, CancellationToken cancellationToken = default)
     {
         var start = request.Start;
-        var end = request.Start;
+        var end = request.End;
         if (start is null || end is null)
         {
             var now = DateTime.UtcNow;
@@ -29,19 +30,20 @@ internal sealed class TransactionHandler : ITransactionHandler
             end = now.GetLastDayOfMonth(); 
         }
 
+        Console.WriteLine($"\t \t \n strAR   {start} \t \t \n");
+        Console.WriteLine($"\t \t \n end {end} \t \t \n");
+        
         var transactions =  await _context.Transactions
-            .Where(x=>x.UserId == request.UserId)
-            .Where(x => x.CreateAt >= start && x.CreateAt <= end )
+            .Where(x => x.UserId == request.UserId && x.CreateAt >= start && x.CreateAt <= end )
             .OrderBy(x=>x.CreateAt)
-            .Skip(request.Page * request.PageSize)
-            .Take(request.PageSize)
             .ToListAsync(cancellationToken);
         
         var count = await _context.Transactions
             .Where(x=>x.UserId == request.UserId)
-            .Where(x => x.PaidOrReceivedAt >= start && x.PaidOrReceivedAt <= end)
+            .Where(x => x.CreateAt >= start && x.CreateAt <= end)
             .CountAsync(cancellationToken);
         
+        Console.WriteLine($"\t \t \n COUNT {count} \t \t \n");
         return new PagedResponse<IEnumerable<Transaction>>(transactions, request.Page, count, request.PageSize);
     }
     
@@ -61,8 +63,6 @@ internal sealed class TransactionHandler : ITransactionHandler
             .Where(x=>x.UserId == request.UserId)
             .Where(x => x.PaidOrReceivedAt >= start && x.PaidOrReceivedAt <= end )
             .OrderBy(x=>x.PaidOrReceivedAt)
-            .Skip(request.Page * request.PageSize)
-            .Take(request.PageSize)
             .ToListAsync(cancellationToken);
         
         var count = await _context.Transactions
@@ -91,6 +91,9 @@ internal sealed class TransactionHandler : ITransactionHandler
             return new Error("Category.NotFound", "Category not found");
         
         var transaction = new Transaction(request.Title,request.Type,request.Amount,category,request.UserId);
+        if (transaction.EType is  ETypeTransaction.Out )
+            transaction.Amount *= -1;    
+        
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync(cancellationToken);
         return transaction;
@@ -117,6 +120,9 @@ internal sealed class TransactionHandler : ITransactionHandler
         transactionUpdate.PaidOrReceivedAt = request.PaidOrReceivedAt;
         transactionUpdate.Amount = request.Amount;
         
+        if(transactionUpdate.EType is ETypeTransaction.Out)
+            transactionUpdate.Amount = request.Amount * -1;
+        
         _context.Transactions.Update(transactionUpdate);
         await _context.SaveChangesAsync(cancellationToken);
         return transactionUpdate;
@@ -135,5 +141,5 @@ internal sealed class TransactionHandler : ITransactionHandler
 
         await _context.SaveChangesAsync(cancellationToken);
         return transaction;
-    }
+    }   
 }

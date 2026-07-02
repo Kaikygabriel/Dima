@@ -12,7 +12,7 @@ public partial class CreatePage : ComponentBase
     [Inject]
     public ICategoryHandler CategoryHandler { get; set; }= null!;
     [Inject]
-    public ITransactionHandler HandlerTransaction { get; set; }= null!;
+    public ITransactionHandler TransactionHandler { get; set; }= null!;
     [Inject]
     public NavigationManager Nav { get; set; } = null!;
     [Inject]
@@ -35,6 +35,8 @@ public partial class CreatePage : ComponentBase
             Nav.NavigateTo("/");
             return;
         }
+        
+        Request.UserId = idUser;
         Categories = await CategoryHandler.GetAllCategoryToCreateTransaction(idUser,default);
         if(Categories is not null)
             Request.CategoryId = Categories.FirstOrDefault()?.CategoryId ?? Guid.Empty;
@@ -44,18 +46,9 @@ public partial class CreatePage : ComponentBase
     {
         try
         {
-            Console.WriteLine("ENTROU");
             IsBusy = true;
             
-            var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var resultId = Guid.TryParse(user.User.Identity?.Name, out Guid idUser);
-            if (!resultId)
-            {
-                Nav.NavigateTo("/");
-                return;
-            }
-
-            var result = await HandlerTransaction .Create(Request);
+            var result = await TransactionHandler.Create(Request);
             if (!result.IsSuccess)
             {
                 SnackBar.Add(result.Error?.Message ?? "Invalid", Severity.Error);

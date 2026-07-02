@@ -17,7 +17,7 @@ public class CategoryHandler : ICategoryHandler
 
     public async Task<IEnumerable<GetCategoryCreateTransaction>?> GetAllCategoryToCreateTransaction(Guid userId, CancellationToken cancellationToken)
     {
-        var endPoint = $"Transaction/v1/All/create/transactions/{userId}";
+        var endPoint = $"Transaction/v1/{userId}";
         var responseRequest = await _client.GetAsync(endPoint,cancellationToken);
         var response = await responseRequest.Content.ReadFromJsonAsync<List<GetCategoryCreateTransaction>>(cancellationToken);
       
