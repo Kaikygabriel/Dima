@@ -18,7 +18,7 @@ public partial class ListPage : ComponentBase
     protected DateTime? End = DateTime.Now.GetLastDayOfMonth();
     
     protected List<Transaction>? Transactions;
-
+    
     [Inject]
     public ICookieAuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
     [Inject]
@@ -27,6 +27,8 @@ public partial class ListPage : ComponentBase
     [Inject]
     public ITransactionHandler TransactionHandler { get; set; } = null!;
 
+    [Inject] 
+    public IDialogService DialogService { get; set; } = null!;
     
     protected override async Task OnInitializedAsync()
     {
@@ -34,33 +36,32 @@ public partial class ListPage : ComponentBase
         var userId = Guid.Parse(user.User!.Identity!.Name!);
         
         _userId = userId;
-        
+
         await GetTransactions();
     }
+    
     protected async Task GetTransactions()
     {
         try
         {
-            Console.WriteLine("ENTROU");
             if (Start > End)
             {
                 Start = DateTime.Now.GetFirstDayOfMonth();
                 End = DateTime.Now.GetLastDayOfMonth();
             }
-            Console.WriteLine("ENTROU 2");
             var result =await TransactionHandler.GetAllByCreateAt(new GetTransactionsRequest(Start, End)
             {
                 UserId = _userId
             });
-            Console.WriteLine("ENTROU 3 ");
+            
             if (!result.IsSuccess)
             {
                 Snackbar.Add(result.Error?.Message ?? "Error", Severity.Error);
                 Snackbar.Add(result.Error?.Title ?? "Error", Severity.Error);
                 return;
             }
-            Console.WriteLine("ENTROU 4");
-            Transactions = result.Data?.ToList();
+            
+            Transactions = result.Data.ToList() ;
         }
         catch (Exception e)
         {
@@ -81,6 +82,22 @@ public partial class ListPage : ComponentBase
 
         return false;
     };
+
+    protected async Task GetDeleteAsync(Guid idTransaction, string title)
+    {
+        var result = await DialogService.ShowMessageBoxAsync($"Excluir Transalçao",
+            $"Deseja deletar a transação {title}", "Deletar", "cancelar") ?? false;
+        if(!result)
+            return;
+
+        var resultRemove = await TransactionHandler.Delete(new DeleteTransactionRequest(idTransaction) { UserId = _userId });
+        if (!resultRemove.IsSuccess)
+        {
+            Snackbar.Add(resultRemove.Error?.Message ?? "Error ao Excluir Transação", Severity.Error);
+            return;
+        }
+        Transactions?.RemoveAll(x => x.Id == idTransaction);
+    }
     
     private async Task<Response<Transaction>> DeleteAsync(Guid idTransaction)
     {

@@ -1,7 +1,6 @@
 @page "/launch/history"
 @inherits ListPage
 
-
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
 
     <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mb-6">
@@ -12,9 +11,31 @@
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Add"
-                   Href="/Transactions/Create">
+                   Href="/transactions/create">
             New Transactions
         </MudButton>
+    </MudStack>
+    
+    <MudStack Class="mb-6">
+        <MudStack Row="true" Justify="Justify.SpaceAround">
+            <div style="width: 90%">
+                <label
+                    for="start-date">Start Date</label>
+                <MudDatePicker
+                    id="start-date"
+                    Class="mt-3 mb-4"
+                    @bind-Date="Start"/>
+            </div>
+            <div style="width: 90%">
+                <label for="end-date">End Date</label>
+                <MudDatePicker
+                    id="end-date"
+                    Class="mt-3 mb-4"
+                    @bind-Date="End"/>
+            </div>
+                
+        </MudStack>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="GetTransactions">Filtrar </MudButton>
     </MudStack>
 
     @if (Transactions is null || !Transactions.Any())
@@ -27,25 +48,6 @@
     }
     else
     {
-        <MudStack>
-            <div>
-                <label
-                    for="start-date">Start Date</label>
-                <MudDatePicker
-                    id="start-date"
-                    Class="mt-3 mb-4"
-                    @bind-Date="Start"/>
-            </div>
-            <div>
-                <label for="end-date">End Date</label>
-                <MudDatePicker
-                    id="end-date"
-                    Class="mt-3 mb-4"
-                    @bind-Date="End"/>
-            </div>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="GetTransactions" >Filtrar </MudButton>
-        </MudStack>
-        
         <MudDataGrid Items="@Transactions"
                      Hover="true"
                      Dense="true"
@@ -55,8 +57,6 @@
                      Hideable="true">
 
             <ToolBarContent>
-            
-                
                 <MudTextField @bind-Value="TermSearch"
                               Placeholder="Filter Title"
                               Adornment="Adornment.Start"
@@ -97,11 +97,11 @@
                                        aria-label="Atualizar"
                                        Href="@($"/categories/edit/{context.Item.Id}")"/>
 
-                        @* <MudIconButton Icon="@Icons.Material.Filled.Delete" *@
-                        @*                Color="Color.Error" *@
-                        @*                aria-label="Excluir" *@
-                                       @* OnClick="@(() => OnDeleteClickedAsync(context.Item.Id, context.Item.Title))" *@
-                        @* /> *@
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       aria-label="Excluir"
+                                       OnClick="@(() => GetDeleteAsync(context.Item.Id,context.Item.Title))"
+                        />
 
                     </CellTemplate>
 
