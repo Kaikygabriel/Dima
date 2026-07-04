@@ -60,8 +60,8 @@ public partial class ListPage : ComponentBase
                 Snackbar.Add(result.Error?.Title ?? "Error", Severity.Error);
                 return;
             }
-            
-            Transactions = result.Data.ToList() ;
+            //50GB + 1.1GB -> UEFI + LINUX
+            Transactions = result.Data?.ToList() ;
         }
         catch (Exception e)
         {

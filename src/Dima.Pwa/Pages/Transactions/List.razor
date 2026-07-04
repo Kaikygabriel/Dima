@@ -1,4 +1,5 @@
 @page "/launch/history"
+@using Dima.Core.Enum
 @inherits ListPage
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
@@ -54,7 +55,10 @@
                      Bordered="true"
                      Striped="true"
                      QuickFilter="SearchFunc"
-                     Hideable="true">
+                     Hideable="true"
+                     Filterable="false"
+                     ColumnResizeMode="ResizeMode.Column"          
+        >
 
             <ToolBarContent>
                 <MudTextField @bind-Value="TermSearch"
@@ -67,7 +71,7 @@
             </ToolBarContent>
             <Columns>
 
-                <TemplateColumn Title="Id">
+                <TemplateColumn Title="Id" Filterable="true" >
                     <CellTemplate >
                         <MudLink Href="@($"/Transactions/details/{context.Item.Id}")"
                                  Typo="Typo.body2">
@@ -78,15 +82,32 @@
                 
                 <PropertyColumn Property="x => x.Title"  Title="Título"/>
 
-                <PropertyColumn Property="x => x.EType" Title="Tipo"/>
+                <TemplateColumn Title="Tipo" Filterable="true">
+                    <CellTemplate>
+                        @if (context.Item.EType is ETypeTransaction.In)
+                        {
+                            <MudChip Color="Color.Success" Size="Size.Small">Entrada</MudChip>
+                        }   
+                        else
+                        {
+                            <MudChip Color="Color.Error" Size="Size.Small">Saida</MudChip>
+                        }
+                    </CellTemplate>
+                </TemplateColumn>
                 
-                <PropertyColumn Format="C" Property="x => x.Amount" Title="Valor"/>
+                @* <PropertyColumn Property="x => x.EType" Title="Tipo"/> *@
                 
-                <PropertyColumn Property="x => x.PaidOrReceivedAt" Title="Data"/>
+                <PropertyColumn Format="C" Property="x => x.Amount" Title="Valor" Filterable="true">
+                    <FooterTemplate>
+                        @context.Items.Sum(x=>x.Amount).ToString("C")
+                    </FooterTemplate>
+                </PropertyColumn>
                 
-                <PropertyColumn Property="x => x.Category.Title" Title="Categoria"/>
+                <PropertyColumn Property="x => x.PaidOrReceivedAt" Title="Data" Filterable="true" />
                 
-                <PropertyColumn Property="x => x.CreateAt" Title="Criação"/>
+                <PropertyColumn Property="x => x.Category.Title" Title="Categoria" Filterable="true" />
+                
+                <PropertyColumn Property="x => x.CreateAt" Title="Criação" Filterable="true" />
 
                 <TemplateColumn Title="Ações">
 
