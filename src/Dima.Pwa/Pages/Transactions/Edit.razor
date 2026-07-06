@@ -1,0 +1,77 @@
+@page "/launch/edit/{id:guid}"
+@using Dima.Core.Enum
+@inherits  Dima.Pwa.Pages.Transactions.EditPage
+
+<MudText Typo="Typo.h3">Edit Transaction</MudText>
+@if ( Error is null && Request is null)
+{
+    <MudProgressCircular Indeterminate="true"/>
+}
+else if (Error is not null)
+{
+    <MudAlert Icon="@Icons.Material.Filled.Error">@Error.Title</MudAlert>
+    <MudAlert Icon="@Icons.Material.Filled.Error">@Error.Message</MudAlert>
+}
+else
+{
+    <MudGrid Justify="Justify.Center" Spacing="4" >
+        <MudItem xs="11" sm="9">
+            <MudPaper Class="pa-6">
+                <EditForm OnValidSubmit="OnValidSubmitAsync" Model="Request" >
+                    <DataAnnotationsValidator/>
+                    
+                    <MudTextField
+                        T="string"
+                        Label="Title"
+                        For="@(()=>Request.Title)"
+                        Required="true"
+                        InputType="InputType.Text"
+                        @bind-Value="Request.Title"
+                        Class="mb-4"
+                    />
+                    
+                    <MudTextField
+                        T="decimal"
+                        Label="Value"
+                        Variant="Variant.Text"
+                        For="@(() => Request.Amount)"
+                        Required="true"
+                        Format="C"
+                        Class="mb-4"
+                        @bind-Value="Request.Amount"/>
+                    
+                    <MudDatePicker Label="Data (opcional)" 
+                                   Required="false" 
+                                   Editable="true"
+                                   Mask="@(new DateMask("dd-MM-yyyy"))"
+                                   DateFormat="dd-MM-yyyy"
+                                   Class="mb-4"
+                                   @bind-Date="Request.PaidOrReceivedAt" />
+                    
+                    <MudSelect @bind-Value="Request.Type" Class="mb-4"  T="@(ETypeTransaction)" Label="Select a Type Transaction" AnchorOrigin="Origin.BottomCenter"  >
+                        <MudSelectItem Value="@(ETypeTransaction.In)" >Entrada</MudSelectItem>
+                        <MudSelectItem Value="@(ETypeTransaction.Out)">Saida</MudSelectItem>
+                    </MudSelect>
+                    
+                    <MudSelect @bind-Value="Request.CategoryId" Class="mb-4"  T="@(Guid)" Label="Select an category" AnchorOrigin="Origin.BottomCenter"  >
+                        @foreach (var category in _categoryCreateTransactions!)
+                        {
+                            <MudSelectItem Value="@(category.CategoryId)">category.Title</MudSelectItem>
+                        }
+                    </MudSelect>
+                    
+                    <div class="mt-10 d-flex justify-center flex-row ">
+                        @if (IsBusy)
+                        {
+                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="36px"/>
+                        }
+                        else
+                        {
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Create</MudButton>
+                        }
+                    </div>
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}

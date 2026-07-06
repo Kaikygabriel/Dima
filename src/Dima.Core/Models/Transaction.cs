@@ -17,6 +17,7 @@ public class Transaction : Model
         Category = category;
         CategoryId = category.Id;
         Amount = amount;
+        UserId = userId;
     }
     public string Title { get; set; } = string.Empty;
 

@@ -60,7 +60,7 @@ public partial class ListPage : ComponentBase
                 Snackbar.Add(result.Error?.Title ?? "Error", Severity.Error);
                 return;
             }
-            //50GB + 1.1GB -> UEFI + LINUX
+            
             Transactions = result.Data?.ToList() ;
         }
         catch (Exception e)
@@ -101,10 +101,17 @@ public partial class ListPage : ComponentBase
     
     private async Task<Response<Transaction>> DeleteAsync(Guid idTransaction)
     {
-        var result = await TransactionHandler.Delete(new DeleteTransactionRequest(idTransaction){UserId = _userId});
+        try
+        {
+            var result = await TransactionHandler.Delete(new DeleteTransactionRequest(idTransaction){UserId = _userId});
         
-        Transactions?.RemoveAll(x => x.Id == idTransaction);
+            Transactions?.RemoveAll(x => x.Id == idTransaction);
         
-        return result;
+            return result;
+        }
+        catch (Exception e)
+        {
+            return new Error("Exception",e.Message);
+        }
     }
 }

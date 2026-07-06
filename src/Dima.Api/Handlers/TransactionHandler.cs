@@ -29,11 +29,9 @@ internal sealed class TransactionHandler : ITransactionHandler
             start = now.GetFirstDayOfMonth();
             end = now.GetLastDayOfMonth(); 
         }
-
-        Console.WriteLine($"\t \t \n strAR   {start} \t \t \n");
-        Console.WriteLine($"\t \t \n end {end} \t \t \n");
         
         var transactions =  await _context.Transactions
+            .Include(x=>x.Category)
             .Where(x => x.UserId == request.UserId && x.CreateAt >= start && x.CreateAt <= end )
             .OrderBy(x=>x.CreateAt)
             .ToListAsync(cancellationToken);
@@ -43,7 +41,6 @@ internal sealed class TransactionHandler : ITransactionHandler
             .Where(x => x.CreateAt >= start && x.CreateAt <= end)
             .CountAsync(cancellationToken);
         
-        Console.WriteLine($"\t \t \n COUNT {count} \t \t \n");
         return new PagedResponse<IEnumerable<Transaction>>(transactions, request.Page, count, request.PageSize);
     }
     

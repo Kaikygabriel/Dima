@@ -47,14 +47,18 @@ public partial class CreatePage : ComponentBase
         try
         {
             IsBusy = true;
-            
+            var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var resultId = Guid.TryParse(user.User.Identity?.Name, out Guid idUser);
+
+            Request.UserId = idUser;
+            Console.WriteLine(Request.UserId);
             var result = await TransactionHandler.Create(Request);
             if (!result.IsSuccess)
             {
                 SnackBar.Add(result.Error?.Message ?? "Invalid", Severity.Error);
                 return;
             }
-            Nav.NavigateTo("/transactions");
+            Nav.NavigateTo("/launch/history");
         }
         catch (Exception e)
         {
