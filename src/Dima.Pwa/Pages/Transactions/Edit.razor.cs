@@ -13,7 +13,7 @@ public partial class EditPage : ComponentBase
     [Parameter]
     public Guid Id { get; set; }
 
-    protected UpdateTransactionRequest Request = new ();
+    protected UpdateTransactionRequest? Request;
 
     protected Error? Error;
     protected IEnumerable<GetCategoryCreateTransaction>? _categoryCreateTransactions;
@@ -41,15 +41,15 @@ public partial class EditPage : ComponentBase
     {
         var userClaims = await StateProvider.GetAuthenticationStateAsync();
         var tryConvertResult = Guid.TryParse(userClaims.User.Identity!.Name, out Guid userId);
+        _userId = userId;
         
-        var transaction = await TransactionHandler.GetById(new GetTransactionsByIdRequest(Id));
-        if (!transaction.IsSuccess)
+        var transaction = await TransactionHandler.GetById(new GetTransactionsByIdRequest(Id){UserId = _userId});
+        if (!transaction.IsSuccess || transaction.Data is null)
         {
-            Error = transaction.Error;
+            Error = transaction.Error ?? new Error("Transaction not Found !","Not Found");
             return;
         }
         
-        _userId = userId;
         
         _categoryCreateTransactions = await CategoryHandler.GetAllCategoryToCreateTransaction(_userId,CancellationToken.None);
         if (_categoryCreateTransactions is null)
@@ -66,6 +66,8 @@ public partial class EditPage : ComponentBase
         try
         {
             IsBusy = true;
+            Request .UserId = _userId;
+            
             var result = await TransactionHandler.Update(Request);
             if (!result.IsSuccess)
             {

@@ -24,6 +24,6 @@ public record UpdateTransactionRequest
             Type = transaction.EType,
             Amount = transaction.Amount,
             CategoryId = transaction.CategoryId,
-            PaidOrReceivedAt = transaction.PaidOrReceivedAt
+            PaidOrReceivedAt = null
         };
 }

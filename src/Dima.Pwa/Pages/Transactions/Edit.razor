@@ -2,7 +2,7 @@
 @using Dima.Core.Enum
 @inherits  Dima.Pwa.Pages.Transactions.EditPage
 
-<MudText Typo="Typo.h3">Edit Transaction</MudText>
+
 @if ( Error is null && Request is null)
 {
     <MudProgressCircular Indeterminate="true"/>
@@ -14,6 +14,7 @@ else if (Error is not null)
 }
 else
 {
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mt-4 mb-6" >Edit Transaction</MudText> 
     <MudGrid Justify="Justify.Center" Spacing="4" >
         <MudItem xs="11" sm="9">
             <MudPaper Class="pa-6">
@@ -54,9 +55,9 @@ else
                     </MudSelect>
                     
                     <MudSelect @bind-Value="Request.CategoryId" Class="mb-4"  T="@(Guid)" Label="Select an category" AnchorOrigin="Origin.BottomCenter"  >
-                        @foreach (var category in _categoryCreateTransactions!)
+                        @foreach (var category in _categoryCreateTransactions)
                         {
-                            <MudSelectItem Value="@(category.CategoryId)">category.Title</MudSelectItem>
+                            <MudSelectItem Value="@(category.CategoryId)">@category.Title</MudSelectItem>
                         }
                     </MudSelect>
                     
@@ -67,7 +68,7 @@ else
                         }
                         else
                         {
-                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Create</MudButton>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Outlined" Color="Color.Primary">Update</MudButton>
                         }
                     </div>
                 </EditForm>

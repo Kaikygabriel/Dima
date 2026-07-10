@@ -31,7 +31,6 @@ public class CookieAuthenticationProvider : AuthenticationStateProvider,ICookieA
         var user = await GetUserAsync();
         if (user is null)
         {
-            Console.WriteLine("CHEGANDO COMO NULL USER");
             return new AuthenticationState(claimsPrincipal);
         }
 
