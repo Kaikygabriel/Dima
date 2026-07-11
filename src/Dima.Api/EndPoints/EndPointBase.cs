@@ -1,5 +1,6 @@
 using Dima.Api.EndPoints.Categories;
 using Dima.Api.EndPoints.Identity;
+using Dima.Api.EndPoints.Reports;
 using Dima.Api.EndPoints.Transactions;
 using Dima.Api.Interfaces.Endpoint;
 using Dima.Api.Models;
@@ -39,6 +40,13 @@ public static class EndPointBase
         
         endpoints.MapGroup("v1/Identity")
             .MapIdentityApi<User>();
+
+        endpoints.MapGroup("v1/Reports")
+            .WithTags("Reports")
+            .Map<GetExpensesAndIncomeEndPoint>()
+            .Map<GetExpensesByCategoryEndPoint>()
+            .Map<GetIncomeByCategoryEndPoint>()
+            .Map<GetFinanceSummaryEndPoint>();
 
         return app;
     }
