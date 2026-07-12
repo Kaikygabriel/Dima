@@ -23,6 +23,7 @@ builder.Services.AddScoped<ICookieAuthenticationStateProvider, CookieAuthenticat
 builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthenticationProvider>();
 builder.Services.AddScoped(x => (ICookieAuthenticationStateProvider )x.GetRequiredService<AuthenticationStateProvider>());
 
+builder.Services.AddScoped<IReportHandler,ReportsHandler>();
 builder.Services.AddScoped<IUserHandler,UserHandler>();
 builder.Services.AddScoped<ICategoryHandler,CategoryHandler>();
 builder.Services.AddScoped<ITransactionHandler,TransactionHandler>();
