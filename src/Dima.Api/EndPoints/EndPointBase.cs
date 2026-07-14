@@ -43,10 +43,11 @@ public static class EndPointBase
 
         endpoints.MapGroup("v1/Reports")
             .WithTags("Reports")
+            .RequireAuthorization()
             .Map<GetExpensesAndIncomeEndPoint>()
             .Map<GetExpensesByCategoryEndPoint>()
             .Map<GetIncomeByCategoryEndPoint>()
-            .Map<GetFinanceSummaryEndPoint>();
+            .Map<GetFinanceSummaryEndPoint>() ;
 
         return app;
     }

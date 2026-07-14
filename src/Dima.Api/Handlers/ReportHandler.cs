@@ -33,7 +33,8 @@ internal sealed class ReportHandler : IReportHandler
 
     public async Task<Response<FinanceSummary>> GetFinanceSummaryAsync(Guid userId)
     {
-        var financeSummary = await _appDbContext.FinanceSummary.FirstOrDefaultAsync(x=>x.UserId == userId);
+        var financeSummary = await _appDbContext.FinanceSummary
+            .FirstOrDefaultAsync(x=>x.UserId == userId);
         if (financeSummary is null)
             return new Error("Not Found", "Not Found");
         return financeSummary;
