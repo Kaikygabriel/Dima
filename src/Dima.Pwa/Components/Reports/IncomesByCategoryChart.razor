@@ -1,0 +1,23 @@
+@inherits IncomesByCategoryChartPage
+
+@if (Error is null && Data is null && Labels is null)
+{
+    <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Row="false">
+        <MudProgressCircular Indeterminate="true" />
+    </MudStack>
+}
+else if (Error is not null)
+{
+    <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Row="false">
+        <MudAlert Icon="@Icons.Material.Filled.Error">@Error.Title</MudAlert>
+        <MudAlert>@Error.Message</MudAlert>
+    </MudStack>
+}
+else
+{
+    <MudChart ChartType="ChartType.Donut" Width="100%" Height="300px" ChartSeries="@Data.AsChartDataSet()" ChartLabels="@Labels">
+        <CustomGraphics>
+            <text class="mud-donut-text mud-typography-h3" x="50%" y="50%" style="font-size: 125%">@Data.Sum().ToString("C")</text>
+        </CustomGraphics>
+    </MudChart>    
+}

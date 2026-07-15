@@ -48,9 +48,9 @@ public class ReportsHandler : IReportHandler
                ?? new Error("Invalid Response","Invalid response");
     }
 
-    public async Task<Response<List<IncomeAndExpenses>>> GetIncomeAndExpensesAsync(Guid userId, int month, int year)
+    public async Task<Response<List<IncomeAndExpenses>>> GetIncomeAndExpensesAsync(Guid userId, int year)
     {
-        var endPoint = $"/v1/Reports/category/incomes/expenses/{userId}?month={month}&year={year}";
+        var endPoint = $"/v1/Reports/category/incomes/expenses/{userId}?year={year}";
         var response = await _httpClient.GetAsync(endPoint);
         if (response.StatusCode == HttpStatusCode.InternalServerError)
             return new Error("Error in Server","Error in Server");

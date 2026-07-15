@@ -40,10 +40,10 @@ internal sealed class ReportHandler : IReportHandler
         return financeSummary;
     }
 
-    public async Task<Response<List<IncomeAndExpenses>>> GetIncomeAndExpensesAsync(Guid userId, int month, int year)
+    public async Task<Response<List<IncomeAndExpenses>>> GetIncomeAndExpensesAsync(Guid userId, int year)
     {
         var expenses = await _appDbContext.IncomesAndExpenses
-            .Where(x => x.UserId == userId && x.Month == month && x.Year == year)
+            .Where(x => x.Year == year)
             .ToListAsync();
         if (!expenses.Any())
             return new Error("Not Found", "NOt Found");
