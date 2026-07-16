@@ -47,12 +47,13 @@ public partial class IncomesAndExpensesByCategoryChartPage : ComponentBase
         Series = new List<ChartSeries<double>>()
         {
             new ChartSeries<double>()
-                { Name = "Incomes", Data = result.Data?.Select(x => (double)x.Incomes).ToArray() ?? [] },
+                { Name = "Incomes", Data = result.Data?.OrderBy(x=>x.Month).Select(x => (double)x.Incomes).ToArray() ?? [] },
             new ChartSeries<double>()
-                { Name = "Expenses", Data = result.Data?.Select(x => (double)Math.Abs(x.Expenses)).ToArray() ?? [] }
+                { Name = "Expenses", Data = result.Data?.OrderBy(x=>x.Month).Select(x => (double)Math.Abs(x.Expenses)).ToArray() ?? [] }
         };
-        var months = result.Data?.Select(x=>x.Month) ?? [];
+        
+        var months = result.Data?.OrderBy(x=>x.Month).Select(x=>x.Month) ?? [];
         AxisLabels = months.Select(m => CultureInfo.GetCultureInfo("pt-BR").DateTimeFormat.GetMonthName(m))
             .ToArray();
     }
-}
+} 

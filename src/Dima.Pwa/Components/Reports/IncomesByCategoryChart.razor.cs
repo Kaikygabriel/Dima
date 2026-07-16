@@ -29,6 +29,6 @@ public partial class IncomesByCategoryChartPage : ComponentBase
         }
 
         Data = result.Data!.Select(x => x.Incomes).ToArray();
-        Labels = result.Data!.Select(x => x.Category + " " + x.Year).ToArray();
+        Labels = result.Data!.Select(x => x.Category + " " + x.Incomes.ToString("C")).ToArray();
     }
 }

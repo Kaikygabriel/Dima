@@ -33,6 +33,6 @@ public partial class ExpensesByCategoryChartPage : ComponentBase
 
         var expenses = result.Data;
         Data = expenses!.Select(x => Math.Abs(x.Expenses)).ToArray();
-        Labels = expenses!.Select(x => $"{x.Category} - {x.Year}").ToArray();
+        Labels = expenses!.Select(x => $"{x.Category} {x.Expenses:C}").ToArray();
     }
 }
