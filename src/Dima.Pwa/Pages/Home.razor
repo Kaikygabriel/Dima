@@ -1,8 +1,26 @@
 ﻿@page "/"
+@using Dima.Pwa.Components.Reports
+@inherits HomePage
 
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
+<MudGrid Justify="Justify.Center" Spacing="4" >
+@if (FinanceSummary is null)
+{
+    <MudProgressCircular Indeterminate="true"></MudProgressCircular>
+}
+else
+{
+    <MudItem>
+        <MudPaper>
+            <MudText Typo="Typo.h4">Incomes</MudText>
+            <MudText>@FinanceSummary.Income.ToString("C")</MudText>
+            <MudDivider/>
+            <MudText Typo="Typo.h4">Expenses</MudText>
+            <MudText>@FinanceSummary.Expense.ToString("C")</MudText>
+        </MudPaper>
+        <MudPaper>
+            <MudText Typo="Typo.h3">Incomes By Category</MudText>
+            <IncomesByCategoryChart/>
+        </MudPaper>
+    </MudItem>
+}
+</MudGrid>
