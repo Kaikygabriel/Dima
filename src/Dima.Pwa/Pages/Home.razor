@@ -9,7 +9,7 @@
 }
 else
 {
-    <MudItem>
+    <MudItem xs="11" md="10">
         <MudPaper>
             <MudText Typo="Typo.h4">Incomes</MudText>
             <MudText>@FinanceSummary.Income.ToString("C")</MudText>
@@ -20,6 +20,15 @@ else
         <MudPaper>
             <MudText Typo="Typo.h3">Incomes By Category</MudText>
             <IncomesByCategoryChart/>
+        </MudPaper>
+        <MudPaper>
+            <MudText Typo="Typo.h3">Expenses By Category</MudText>
+            <ExpensesByCategoryChart/>
+        </MudPaper>
+        
+        <MudPaper>
+            <MudText Typo="Typo.h3">Incomes and Expenses</MudText>
+            <IncomesAndExpensesByCategoryChart/>
         </MudPaper>
     </MudItem>
 }
