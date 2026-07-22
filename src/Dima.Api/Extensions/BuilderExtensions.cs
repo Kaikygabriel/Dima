@@ -24,7 +24,6 @@ public  static class BuilderExtensions
     public static WebApplicationBuilder AddDependency(this WebApplicationBuilder builder)
     {
         builder.Services.AddTransient<IReportHandler , ReportHandler>();
-
         builder.Services.AddTransient<ICategoryHandler,CategoryHandler>();
         builder.Services.AddTransient<ITransactionHandler,TransactionHandler>();
         builder.Services.AddExceptionHandler<ExceptionGlobalHandler>();

@@ -9,25 +9,33 @@
 }
 else
 {
-    <MudItem xs="11" md="10">
-        <MudPaper>
-            <MudText Typo="Typo.h4">Incomes</MudText>
+    <MudItem xs="10" sm="8">
+        <MudPaper Class="mt-3 mb-6 pa-4 ">
+            <MudStack Justify="Justify.Center" Row="false" AlignItems="AlignItems.Center">
+                
+            <MudText Typo="Typo.h5">Incomes</MudText>
             <MudText>@FinanceSummary.Income.ToString("C")</MudText>
             <MudDivider/>
-            <MudText Typo="Typo.h4">Expenses</MudText>
+            <MudText Typo="Typo.h5">Expenses</MudText>
             <MudText>@FinanceSummary.Expense.ToString("C")</MudText>
+            
+            </MudStack>
         </MudPaper>
-        <MudPaper>
-            <MudText Typo="Typo.h3">Incomes By Category</MudText>
+        
+        
+        <MudPaper Class="mb-6 pa-4 ">
+            <MudText Typo="Typo.h5">Incomes By Category</MudText>
             <IncomesByCategoryChart/>
         </MudPaper>
-        <MudPaper>
-            <MudText Typo="Typo.h3">Expenses By Category</MudText>
+        
+        <MudPaper Class="mb-6 pa-4 ">
+            <MudText Typo="Typo.h5">Expenses By Category</MudText>
             <ExpensesByCategoryChart/>
         </MudPaper>
         
-        <MudPaper>
-            <MudText Typo="Typo.h3">Incomes and Expenses</MudText>
+        <MudPaper Class="mb-6 pa-4 ">
+            
+            <MudText Typo="Typo.h5">Incomes and Expenses</MudText>
             <IncomesAndExpensesByCategoryChart/>
         </MudPaper>
     </MudItem>
