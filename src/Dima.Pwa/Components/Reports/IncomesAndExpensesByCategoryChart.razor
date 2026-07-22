@@ -1,21 +1,27 @@
-@inherits IncomesAndExpensesByCategoryChartPage
+@inherits IncomesAndExpensesByCategoryChartComponent
 @using MudBlazor.Charts;
 
-<MudPaper Class="doc-section-component-container mx-8">
-    <MudToolBar>
-        <MudMenu Modal="false" Variant="Variant.Outlined" EndIcon="@_menuIcons[_chartType]" IconColor="Color.Primary" Label="Chart Type">
-            <MudMenuItem Icon="@_menuIcons[ChartType.Bar]" Label="Bar" OnClick="() => _chartType = ChartType.Bar" Disabled="@(_chartType == ChartType.Bar)"/>
-            <MudMenuItem Icon="@_menuIcons[ChartType.StackedBar]" Label="Stacked Bar" OnClick="() => _chartType = ChartType.StackedBar" Disabled="@(_chartType == ChartType.StackedBar)" />
-            <MudMenuItem Icon="@_menuIcons[ChartType.Line]" Label="Line" OnClick="() => _chartType = ChartType.Line" Disabled="@(_chartType == ChartType.Line)" />
-            <MudMenuItem Icon="@_menuIcons[ChartType.Pie]" Label="Pie" OnClick="() => _chartType = ChartType.Pie" Disabled="@(_chartType == ChartType.Pie)" />
-            <MudMenuItem Icon="@_menuIcons[ChartType.Donut]" Label="Donut" OnClick="() => _chartType = ChartType.Donut" Disabled="@(_chartType == ChartType.Donut)" />
-            <MudMenuItem Icon="@_menuIcons[ChartType.Rose]" Label="Rose" OnClick="() => _chartType = ChartType.Rose" Disabled="@(_chartType == ChartType.Rose)"/>
-            <MudMenuItem Icon="@_menuIcons[ChartType.Radar]" Label="Radar" OnClick="() => _chartType = ChartType.Radar" Disabled="@(_chartType == ChartType.Radar)"  />
-        </MudMenu>
-    </MudToolBar>
+<MudToolBar>
+    <MudMenu Modal="false" Variant="Variant.Outlined" EndIcon="@MenuIcons[ChartType]" IconColor="Color.Primary"
+             Label="Chart Type">
+        <MudMenuItem Icon="@MenuIcons[ChartType.Bar]" Label="Bar" OnClick="() => ChartType = ChartType.Bar"
+                     Disabled="@(ChartType == ChartType.Bar)"/>
+        <MudMenuItem Icon="@MenuIcons[ChartType.StackedBar]" Label="Stacked Bar"
+                     OnClick="() => ChartType = ChartType.StackedBar" Disabled="@(ChartType == ChartType.StackedBar)"/>
+        <MudMenuItem Icon="@MenuIcons[ChartType.Line]" Label="Line" OnClick="() => ChartType = ChartType.Line"
+                     Disabled="@(ChartType == ChartType.Line)"/>
+        <MudMenuItem Icon="@MenuIcons[ChartType.Pie]" Label="Pie" OnClick="() => ChartType = ChartType.Pie"
+                     Disabled="@(ChartType == ChartType.Pie)"/>
+        <MudMenuItem Icon="@MenuIcons[ChartType.Donut]" Label="Donut" OnClick="() => ChartType = ChartType.Donut"
+                     Disabled="@(ChartType == ChartType.Donut)"/>
+        <MudMenuItem Icon="@MenuIcons[ChartType.Rose]" Label="Rose" OnClick="() => ChartType = ChartType.Rose"
+                     Disabled="@(ChartType == ChartType.Rose)"/>
+        <MudMenuItem Icon="@MenuIcons[ChartType.Radar]" Label="Radar" OnClick="() => ChartType = ChartType.Radar"
+                     Disabled="@(ChartType == ChartType.Radar)"/>
+    </MudMenu>
+</MudToolBar>
 
-    <MudChart ChartType="_chartType"
-              ChartSeries="Series"
-              ChartLabels="@AxisLabels"
-              Width="100%" Height="400px" CanHideSeries MatchBoundsToSize />
-</MudPaper>
+<MudChart ChartType="ChartType"
+          ChartSeries="Series"
+          ChartLabels="@AxisLabels"
+          Width="100%" Height="400px" CanHideSeries MatchBoundsToSize/>

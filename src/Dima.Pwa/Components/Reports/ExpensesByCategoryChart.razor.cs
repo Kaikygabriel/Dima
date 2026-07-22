@@ -6,7 +6,7 @@ using MudBlazor;
 
 namespace Dima.Pwa.Components.Reports;
 
-public partial class ExpensesByCategoryChartPage : ComponentBase
+public partial class ExpensesByCategoryChartComponent : ComponentBase
 {
     [Inject]
     public IReportHandler ReportHandler { get; set; } = null!;

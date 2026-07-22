@@ -7,10 +7,10 @@ using MudBlazor;
 
 namespace Dima.Pwa.Components.Reports;
 
-public partial class IncomesAndExpensesByCategoryChartPage : ComponentBase
+public partial class IncomesAndExpensesByCategoryChartComponent : ComponentBase
 {
     
-    protected Dictionary<ChartType, string> _menuIcons = new()
+    protected readonly Dictionary<ChartType, string> MenuIcons = new()
     {
         { ChartType.Bar, Icons.Material.Filled.BarChart },
         { ChartType.StackedBar, Icons.Material.Filled.StackedBarChart },
@@ -18,9 +18,9 @@ public partial class IncomesAndExpensesByCategoryChartPage : ComponentBase
         { ChartType.Pie, Icons.Material.Filled.PieChart },
         { ChartType.Donut, Icons.Material.Filled.DonutLarge },
         { ChartType.Rose, Icons.Material.Filled.DonutSmall },
-        { ChartType.Radar, Icons.Material.Filled.Hub },
+        { ChartType.Radar, Icons.Material.Filled.Hub }
     };
-    protected ChartType _chartType = ChartType.Bar;
+    protected ChartType ChartType = ChartType.Bar;
 
     protected List<ChartSeries<double>>? Series;
     protected string[]? AxisLabels;

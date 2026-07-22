@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Dima.Pwa.Components.Reports;
 
-public partial class IncomesByCategoryChartPage : ComponentBase
+public partial class IncomesByCategoryChartComponent : ComponentBase
 {
     protected decimal[]? Data ;
     protected string[]? Labels ;

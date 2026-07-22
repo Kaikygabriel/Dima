@@ -2,6 +2,7 @@
 @using Dima.Pwa.Components.Reports
 @inherits HomePage
 
+<PageTitle>Home </PageTitle>
 <MudGrid Justify="Justify.Center" Spacing="4" >
 @if (FinanceSummary is null)
 {
@@ -9,35 +10,63 @@
 }
 else
 {
-    <MudItem xs="10" sm="8">
-        <MudPaper Class="mt-3 mb-6 pa-4 ">
-            <MudStack Justify="Justify.Center" Row="false" AlignItems="AlignItems.Center">
-                
-            <MudText Typo="Typo.h5">Incomes</MudText>
-            <MudText>@FinanceSummary.Income.ToString("C")</MudText>
-            <MudDivider/>
-            <MudText Typo="Typo.h5">Expenses</MudText>
-            <MudText>@FinanceSummary.Expense.ToString("C")</MudText>
+    <MudItem lg="6" sm="12">
+        <MudCard Class="pa-8 ">
             
+            <MudStack Class="mb-10" Justify="Justify.SpaceAround" Row="true" AlignItems="AlignItems.Center">
+                <div>
+                    <MudText Typo="Typo.h4" >Saldo</MudText>
+                    <MudText Typo="Typo.h6" >@Total</MudText>
+                </div>
+                <div>
+                    @if (IsVisible)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.VisibilityOff" OnClick="AlterVisibility"/>
+                    }
+                    else
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility" OnClick="AlterVisibility"/>
+                    }
+                </div>
             </MudStack>
-        </MudPaper>
-        
-        
-        <MudPaper Class="mb-6 pa-4 ">
-            <MudText Typo="Typo.h5">Incomes By Category</MudText>
-            <IncomesByCategoryChart/>
-        </MudPaper>
-        
-        <MudPaper Class="mb-6 pa-4 ">
-            <MudText Typo="Typo.h5">Expenses By Category</MudText>
-            <ExpensesByCategoryChart/>
-        </MudPaper>
-        
-        <MudPaper Class="mb-6 pa-4 ">
             
-            <MudText Typo="Typo.h5">Incomes and Expenses</MudText>
-            <IncomesAndExpensesByCategoryChart/>
-        </MudPaper>
+            <MudStack Justify="Justify.Center" Row="false" AlignItems="AlignItems.Start">
+
+                <MudText Typo="Typo.h6" Color="Color.Secondary">Incomes</MudText>
+                <MudText Typo="Typo.subtitle2" Color="Color.Secondary">@Incomes</MudText>
+                <MudDivider/>
+                <MudText Typo="Typo.h6" Color="Color.Error">Expenses</MudText>
+                <MudText Typo="Typo.subtitle2" Color="Color.Error">@Expenses</MudText>
+
+            </MudStack>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem lg="6" sm="12">
+        <MudCard Class="pa-8">
+            <MudStack Justify="Justify.Center" Row="false" AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h5">Incomes By Category</MudText>
+                <IncomesByCategoryChart/>
+            </MudStack>
+        </MudCard>
+    </MudItem>
+
+    <MudItem lg="6" sm="12">
+        <MudCard Class="pa-8">
+            <MudStack Justify="Justify.Center" Row="false" AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h5">Expenses By Category</MudText>
+                <ExpensesByCategoryChart/>
+            </MudStack>
+        </MudCard>
+    </MudItem>
+        
+    <MudItem lg="6" sm="12">
+        <MudCard Class="pa-8">
+            <MudStack Justify="Justify.Center" Row="false" AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h5">Incomes and Expenses</MudText>
+                <IncomesAndExpensesByCategoryChart/>
+            </MudStack>
+        </MudCard>
     </MudItem>
 }
 </MudGrid>
