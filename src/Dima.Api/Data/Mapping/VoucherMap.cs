@@ -22,13 +22,13 @@ internal class VoucherMap : IEntityTypeConfiguration<Voucher>
             .IsRequired();
         
         builder.Property(x => x.Code)
-            .HasColumnType("NVARCHAR")
-            .HasMaxLength(120)
+            .HasColumnType("CHAR")
+            .HasMaxLength(8)
             .IsRequired();
         
         builder.Property(x => x.Description)
             .HasColumnType("VARCHAR")
-            .HasMaxLength(355)
+            .HasMaxLength(255)
             .IsRequired();
         
         builder.Property(x => x.StartDate)
@@ -38,5 +38,11 @@ internal class VoucherMap : IEntityTypeConfiguration<Voucher>
         builder.Property(x => x.EndDate)
             .HasColumnType("DATETIME2")
             .IsRequired();
+
+        builder.HasIndex(x => x.Code)
+            .IsUnique();
+        
+        builder.HasIndex(x => x.Title)
+            .IsUnique();
     }
 }

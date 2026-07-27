@@ -8,6 +8,7 @@ internal class OrderMap : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
+        
         builder.ToTable("Order");
         
         builder.HasKey(x => x.Id);
@@ -22,12 +23,8 @@ internal class OrderMap : IEntityTypeConfiguration<Order>
 
         builder.Property(x => x.ExternalReference)
             .HasColumnType("VARCHAR")
-            .HasMaxLength(300)
+            .HasMaxLength(100)
             .IsRequired(false);
-        
-        builder.Property(x => x.Total)
-            .HasColumnType("MONEY")
-            .IsRequired();
         
         builder.Property(x => x.StatePayment)
             .HasConversion<string>()
@@ -40,7 +37,7 @@ internal class OrderMap : IEntityTypeConfiguration<Order>
         builder.HasOne(x => x.Voucher)
             .WithMany()
             .HasForeignKey(x=>x.VoucherId)
-            .OnDelete(DeleteBehavior.Cascade)
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired(false);
         
         builder.HasOne(x => x.Product)
