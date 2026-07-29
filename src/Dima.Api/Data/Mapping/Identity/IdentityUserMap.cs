@@ -1,4 +1,5 @@
 using Dima.Api.Models;
+using Dima.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -48,8 +49,31 @@ public class IdentityUserMap : IEntityTypeConfiguration<User>
         builder.Property(x => x.ConcurrencyStamp)
             .IsConcurrencyToken();
 
+        builder.HasMany(x => x.VouchersUsed)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "VoucherUser", 
+                x=>
+                                x.HasOne<Voucher>()
+                                .WithMany()
+                                .HasForeignKey("VoucherId")
+                                .HasConstraintName("FK_VoucherUser_VoucherId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                , 
+                x=>
+                                  x.HasOne<User>()
+                                  .WithMany()
+                                  .HasForeignKey("UserId")
+                                  .HasConstraintName("FK_VoucherUser_UserId")
+                                  .OnDelete(DeleteBehavior.Cascade),
+                
+        x =>
+                                 x.HasKey("VoucherId", "UserId")
+        );
+        
         builder.HasIndex(x => x.NormalizedUserName)
             .IsUnique();
+        
         builder.HasIndex(x => x.NormalizedEmail)
             .IsUnique();
 

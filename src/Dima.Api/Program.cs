@@ -22,7 +22,9 @@ builder.Services.AddScoped<
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
+{
     app.UseDeveloperEnvironment();
+}
 
 app.MapEndpoints();
 
