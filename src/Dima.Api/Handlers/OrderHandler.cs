@@ -19,17 +19,61 @@ internal sealed class OrderHandler : IOrderHandler
 
     public async Task<Response<Order>> CreateAsync(CreateOrderRequest request)
     {
+        var user = await _appDbContext.Users
+            .Include(x => x.VouchersUsed)
+            .FirstOrDefaultAsync(x => x.Id == request.UserId);
+
+        if (user is null)
+            return new Error("User Not Found", "User Not Found!");
+
+        Voucher? voucher = null;
+        if (!user.VouchersUsed.Exists(x => x.Id == request.VoucherId))
+            voucher = await _appDbContext.Vouchers
+                .Where(x=>x.StartDate >= DateTime.Now && x.EndDate <= DateTime.Now)
+                .FirstOrDefaultAsync(x => x.Id == request.VoucherId);
         
+        var product = await _appDbContext.Products.FirstOrDefaultAsync(x => x.Id == request.ProductId);
+
+        if (product is null)
+            return new Error("Product Not Found", "Product Not Found!");
+
+        _appDbContext.Attach(product);
+        
+        var order = new Order(product, user.Id, voucher);
+        _appDbContext.Orders.Add(order);
+        await _appDbContext.SaveChangesAsync();
+        
+        return order;
     }
 
-    public Task<Response<Order>> PayAsync(PayOrderRequest request)
+    public async Task<Response<Order>> PayAsync(PayOrderRequest request)
     {
-        throw new NotImplementedException();
+        var order = await _appDbContext.Orders.FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+        if (order is null)
+            return new Error("Order not Found", "Not Found !");
+        order.AlterState(EStatePayment.Paid);
+        
+        _appDbContext.Update(order);
+        await _appDbContext.SaveChangesAsync();
+
+        return order;
     }
 
-    public Task<Response<Order>> RefundAsync(RefundOrderRequest request)
+    public async Task<Response<Order>> RefundAsync(RefundOrderRequest request)
     {
-        throw new NotImplementedException();
+        var order = await _appDbContext.Orders.FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+        if (order is null)
+            return new Error("Order not Found", "Not Found !");
+        
+        if(order.StatePayment is not EStatePayment.Paid)
+            return new Error("Order not paid", "Not paid for be refound !");
+        
+        order.AlterState(EStatePayment.Reversed);
+        
+        _appDbContext.Update(order);
+        await _appDbContext.SaveChangesAsync();
+  
+        return order;
     }
 
     public async Task<Response<Order>> CancelAsync(CancelOrderRequest request)
@@ -37,7 +81,7 @@ internal sealed class OrderHandler : IOrderHandler
         var order = await _appDbContext.Orders
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId);
         if (order is null)
-            return new Error("Order Not Found","Order Not Found !");
+            return new Error("Order Not Found","Order Not Found !"); 
         if(order.StatePayment is EStatePayment.Paid || 
            order.StatePayment is EStatePayment.Reversed ||
            order.StatePayment is EStatePayment.Cancel)
@@ -45,6 +89,7 @@ internal sealed class OrderHandler : IOrderHandler
 
         order.AlterState(EStatePayment.Cancel);
         _appDbContext.Orders.Update(order);
+        
         await _appDbContext.SaveChangesAsync();
         
         return order;

@@ -20,6 +20,8 @@ builder.Services.AddScoped<
     IUserClaimsPrincipalFactory<User>,
     CustomClaimsPrincipalFactory>();
 
+builder.WebHost.UseKestrel(x=>x.AddServerHeader = false);
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

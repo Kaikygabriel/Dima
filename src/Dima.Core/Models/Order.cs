@@ -36,7 +36,10 @@ public class Order : Model
     public Guid? VoucherId { get;private set; }
 
     public void AlterState(EStatePayment newStatePayment)
-        => StatePayment = newStatePayment;
+    {
+        StatePayment = newStatePayment;
+        UpdateAt = DateTime.Now;
+    }
 
     public decimal Total => Product.Price - (Voucher?.Amount ?? 0);
 }
