@@ -27,11 +27,14 @@ internal sealed class VoucherHandler : IVoucherHandler
 
         var voucher = await _context.Vouchers
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => request.Code == x.Code && x.IsActive);
+            .FirstOrDefaultAsync(x => request.Code == x.Code );
         
-        if(voucher is null)
+        if(voucher is null )
             return new Error("Voucher not Found","Voucher Invalid");
-
+        
+        if(!voucher.IsActive)
+            return new Error("Voucher not Active","Voucher Invalid");
+            
         if (user.VouchersUsed.Exists(x => x.Id == voucher.Id))
             return new Error("Voucher already use", "Voucher invalid");
         

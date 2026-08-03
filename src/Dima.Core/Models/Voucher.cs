@@ -29,5 +29,5 @@ public class Voucher : Model
     public DateTime EndDate { get;private set; }
 
     public bool IsActive =>
-        StartDate >= DateTime.Now && EndDate <= DateTime.Now;
+        StartDate <= DateTime.Now && EndDate >= DateTime.Now;
 } 

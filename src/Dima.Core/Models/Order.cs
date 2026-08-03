@@ -23,11 +23,12 @@ public class Order : Model
     public string? ExternalReference { get;private set; }
 
     public DateTime CreateAt { get; private init; } = DateTime.Now;
+    public DateTime PaytAt { get; private set; } 
     public DateTime UpdateAt { get; private set; }
 
     public EPaymentGateway PaymentGateway { get; private set; } 
     public EStatePayment StatePayment { get;private set; }
-    public Product Product { get;private set; }
+    public Product Product { get; private set; } = null!;
 
     public Guid ProductId { get;private set; }
     public Guid UserId { get;private set; }
@@ -37,9 +38,16 @@ public class Order : Model
 
     public void AlterState(EStatePayment newStatePayment)
     {
+        if (newStatePayment is EStatePayment.Paid)
+            PaytAt = DateTime.Now;
         StatePayment = newStatePayment;
         UpdateAt = DateTime.Now;
     }
 
+    public void AlterExternalCode(string newExternalCode)
+    {
+        ExternalReference = newExternalCode;
+        UpdateAt = DateTime.Now;
+    }
     public decimal Total => Product.Price - (Voucher?.Amount ?? 0);
 }

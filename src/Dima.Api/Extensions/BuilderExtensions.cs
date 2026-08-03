@@ -23,6 +23,10 @@ public  static class BuilderExtensions
 
     public static WebApplicationBuilder AddDependency(this WebApplicationBuilder builder)
     {
+        builder.Services.AddTransient<IVoucherHandler , VoucherHandler>();
+        builder.Services.AddTransient<IProductHandler, ProductHandler>();
+        builder.Services.AddTransient<IOrderHandler,OrderHandler>();
+        
         builder.Services.AddTransient<IReportHandler , ReportHandler>();
         builder.Services.AddTransient<ICategoryHandler,CategoryHandler>();
         builder.Services.AddTransient<ITransactionHandler,TransactionHandler>();
