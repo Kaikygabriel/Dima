@@ -99,9 +99,7 @@ internal sealed class OrderHandler : IOrderHandler
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId,cancellationToken);
         if (order is null)
             return new Error("Order Not Found","Order Not Found !"); 
-        if(order.StatePayment is EStatePayment.Paid || 
-           order.StatePayment is EStatePayment.Reversed ||
-           order.StatePayment is EStatePayment.Cancel)
+        if(order.StatePayment != EStatePayment.AwaitingPay)
             return new Error("Order Not Canceled","The order cannot be cancelled.!");
 
         order.AlterState(EStatePayment.Cancel);

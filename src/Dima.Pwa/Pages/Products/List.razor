@@ -1,0 +1,47 @@
+@page "/products"
+@inherits ListProductPage
+
+<MudText Class="mt-4 ml-3" Typo="Typo.h3">Products</MudText>
+
+@if (Products is null && Error is null)
+{
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+        <MudProgressCircular Indeterminate="true"/>
+    </MudStack>
+}
+else if (Error is not null)
+{
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+        <MudAlert>@Error.Message</MudAlert>
+    </MudStack>
+}
+else
+{
+    <MudText Class="ml-3 mt-4">Tenha acesso ilimitado a aplicação, transações e categorias ilimitadas.</MudText>
+    
+    <MudGrid Justify="Justify.Center"  Class="mt-8 mb-10">
+        @if (Products != null)
+        {
+            foreach (var product in Products)
+            {
+                <MudItem Style="width: 300px;height:150px" Class="mt-8">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h6" Align="Align.Center">@product.Title</MudText>
+                        </MudCardContent>
+                        <MudCardActions Style="width: 100%; justify-content: center; align-items: center">
+                            <MudButton Style="width: 100%; font-size: 20px" Variant="Variant.Text"
+                                       Color="Color.Primary">
+                                @product.Price.ToString("C")
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        }
+    </MudGrid>
+    
+    <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Class="mb-10">
+        <MudPagination Color="Color.Primary" Count="TotalPage" @bind-Selected="Page"/>
+    </MudStack>
+}

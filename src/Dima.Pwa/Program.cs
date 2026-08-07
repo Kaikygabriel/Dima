@@ -23,15 +23,19 @@ builder.Services.AddScoped<ICookieAuthenticationStateProvider, CookieAuthenticat
 builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthenticationProvider>();
 builder.Services.AddScoped(x => (ICookieAuthenticationStateProvider )x.GetRequiredService<AuthenticationStateProvider>());
 
+builder.Services.AddScoped<IVoucherHandler,VoucherHandler>();
+builder.Services.AddScoped<IProductHandler,ProductHandler>();
+builder.Services.AddScoped<IOrderHandler,OrderHandler>();
 builder.Services.AddScoped<IReportHandler,ReportsHandler>();
 builder.Services.AddScoped<IUserHandler,UserHandler>();
 builder.Services.AddScoped<ICategoryHandler,CategoryHandler>();
 builder.Services.AddScoped<ITransactionHandler,TransactionHandler>();
+
 builder.Services.AddMudServices();
 
 builder.Services.AddLocalization();
 
-CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
+ CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pt-BR");
 
 builder.Services.AddHttpClient(Configuration.HttpClientName, x =>
