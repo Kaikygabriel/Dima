@@ -1,4 +1,4 @@
-@page "/products"
+@page "/premium"
 @inherits ListProductPage
 
 <MudText Class="mt-4 ml-3" Typo="Typo.h3">Products</MudText>
@@ -31,6 +31,7 @@ else
                         </MudCardContent>
                         <MudCardActions Style="width: 100%; justify-content: center; align-items: center">
                             <MudButton Style="width: 100%; font-size: 20px" Variant="Variant.Text"
+                                       Href=@($"/checkout/{product.Id}")
                                        Color="Color.Primary">
                                 @product.Price.ToString("C")
                             </MudButton>
