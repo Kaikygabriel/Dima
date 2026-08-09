@@ -12,8 +12,8 @@ public class RefoundOrderEndPoint : IEndPoint
     {
         builder.MapPost("/refund",async ([FromBody]RefundOrderRequest  request,ClaimsPrincipal claims,[FromServices] IOrderHandler orderHandler) =>
         {
-            if (claims.Identity?.Name != request.UserId.ToString())
-                return Results.Unauthorized();
+            request.UserId = Guid.Parse(claims.Identity?.Name ?? Guid.Empty.ToString() );
+            
             var result = await orderHandler.RefundAsync(request);
             return result.IsSuccess ?
                 Results.Ok(result) :

@@ -12,8 +12,8 @@ public class PayOrderEndPoint  : IEndPoint
     {
         builder.MapPost("/pay",async ([FromBody] PayOrderRequest request,ClaimsPrincipal claims,[FromServices] IOrderHandler orderHandler) =>
         {
-            if (claims.Identity?.Name != request.UserId.ToString())
-                return Results.Unauthorized();
+            request.UserId = Guid.Parse(claims.Identity?.Name ?? Guid.Empty.ToString() );
+            
             var result = await orderHandler.PayAsync(request);
             return result.IsSuccess ?
                 Results.Ok(result) :

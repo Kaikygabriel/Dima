@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Dima.Api.Interfaces.Endpoint;
 using Dima.Core.Handler;
 using Dima.Core.Requests.Orders;
@@ -9,8 +10,10 @@ public class CancelOrderEndPoint : IEndPoint
     public static void Map(IEndpointRouteBuilder builder)
     {
         builder.MapPut("/cancel",
-            async (IOrderHandler handler,CancelOrderRequest request,CancellationToken cancellationToken) =>
+            async (IOrderHandler handler,CancelOrderRequest request,ClaimsPrincipal claims,CancellationToken cancellationToken) =>
             {
+                request.UserId = Guid.Parse(claims.Identity?.Name ?? Guid.Empty.ToString() );
+                
                 var result = await handler.CancelAsync(request, cancellationToken);
                 return result.IsSuccess ?
                     Results.Ok(result) :
