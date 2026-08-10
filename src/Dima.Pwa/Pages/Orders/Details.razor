@@ -1,0 +1,66 @@
+@page "/order/{orderId:guid}"
+
+@if (Order is null && Error is null)
+{
+    <div style="left: 50%; bottom: 50%; right: 50%; top: 50%">
+        <MudProgressCircular Indeterminate="true"></MudProgressCircular>
+    </div>
+}
+else if (Error is not null)
+{
+    <MudText
+        AdornmentIcon="@Icons.Material.Filled.Error"
+        Color="Color.Error"
+        Typo="Typo.h3"
+        Adornment="Adornment.Start">
+        @Error.Title
+    </MudText>
+    <MudText
+        AdornmentIcon="@Icons.Material.Filled.Error"
+        Color="Color.Error"
+        Typo="Typo.h5"
+        Adornment="Adornment.Start"
+        Class="mt-4">
+        @Error.Message
+    </MudText>
+}
+else
+{
+    <MudText Typo="Typo.h3" Align="Align.Center">Details Order</MudText>
+    <MudGrid Justify="Justify.Center" Class="mt-4" > 
+        <MudItem xl="11" md="6">
+            <MudPaper Class="pa-4">
+                <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center">
+                    <MudText Typo="Typo.body1">Product</MudText>
+                    <MudText Typo="Typo.body1">@Order!.Product.Title</MudText>
+                </MudStack>
+                
+                <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Class="mt-3">
+                    <MudText Typo="Typo.body1">State Pay</MudText>
+                    <MudText Typo="Typo.body1">@Order!.StatePayment.ToString()</MudText>
+                </MudStack>
+                
+                <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Class="mt-3">
+                    <MudText Typo="Typo.body1">Create At</MudText>
+                    <MudText Typo="Typo.body1">@Order!.CreateAt.ToString("dd/MM/yyyy")</MudText>
+                </MudStack>
+                <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Class="mt-3">
+                    <MudText Typo="Typo.body1">ID Order</MudText>
+                    <MudText Typo="Typo.body1">@Order!.Id</MudText>
+                </MudStack>
+                @if (Order!.Voucher is not null)
+                {
+                    <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" >
+                        <MudText Typo="Typo.body1">Voucher</MudText>
+                        <MudText Typo="Typo.body1">@Order!.Voucher.Title</MudText>
+                    </MudStack>
+                }
+                <MudDivider Class="mt-3" />
+                <MudStack Row="true" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center" Class="mt-4">
+                    <MudText Typo="Typo.h5">Total</MudText>
+                    <MudText Typo="Typo.h5">@Order!.Total.ToString("C")</MudText>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
