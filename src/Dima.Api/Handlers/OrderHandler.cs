@@ -96,6 +96,7 @@ internal sealed class OrderHandler : IOrderHandler
     public async Task<Response<Order>> CancelAsync(CancelOrderRequest request,CancellationToken cancellationToken = default)
     {
         var order = await _appDbContext.Orders
+            .Include(x=>x.Product)
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == request.UserId,cancellationToken);
         if (order is null)
             return new Error("Order Not Found","Order Not Found !"); 

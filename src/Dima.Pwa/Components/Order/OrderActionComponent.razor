@@ -1,0 +1,21 @@
+@using Dima.Core.Enum
+@switch (Order.StatePayment)
+{
+    case EStatePayment.AwaitingPay :
+        <MudButton OnClick="OnCancelClicked" Variant="Variant.Filled"  Class="mt-3" FullWidth="true" Color="Color.Error">
+            Cancel
+        </MudButton>
+        <MudButton Class="mt-3" Variant="Variant.Filled" FullWidth="true" Color="Color.Primary">
+            Pay With Stripe
+        </MudButton>
+    break;
+    case EStatePayment.Paid:
+        <MudButton Class="mt-3"
+                   OnClick="OnRefoundClicked"
+                   Variant="Variant.Filled"
+                   FullWidth="true" Color="Color.Warning">
+                Refound
+            </MudButton>
+        break;
+   
+}

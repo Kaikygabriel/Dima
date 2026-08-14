@@ -1,0 +1,19 @@
+@using Dima.Core.Enum
+@switch (StatePayment)
+{
+    case EStatePayment.AwaitingPay :
+        <MudChip T="string" Color="Color.Info" >Awaiting Pay</MudChip>    
+    break;
+    case EStatePayment.Paid:
+        <MudChip T="string" Color="Color.Success">Paid</MudChip>
+    break;
+    case EStatePayment.Cancel :
+        <MudChip T="string" Color="Color.Error">Cancel</MudChip>
+    break;
+    case EStatePayment.Reversed :
+        <MudChip T="string" Color="Color.Warning">Reversed</MudChip>
+    break;
+    default:    
+        <MudChip T="string"   Color="Color.Info">Status Not Found</MudChip>
+    break;
+}

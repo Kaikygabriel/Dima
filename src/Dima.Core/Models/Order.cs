@@ -27,7 +27,7 @@ public class Order : Model
     public DateTime UpdateAt { get; private set; }
 
     public EPaymentGateway PaymentGateway { get; private set; } 
-    public EStatePayment StatePayment { get;private set; }
+    public EStatePayment StatePayment { get;set; }
     public Product Product { get; private set; } = null!;
 
     public Guid ProductId { get;private set; }
@@ -43,7 +43,7 @@ public class Order : Model
         StatePayment = newStatePayment;
         UpdateAt = DateTime.Now;
     }
-
+    
     public void AlterExternalCode(string newExternalCode)
     {
         ExternalReference = newExternalCode;

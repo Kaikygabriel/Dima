@@ -34,11 +34,7 @@ internal sealed class OrderHandler : IOrderHandler
         var resultRequest = await _httpClient.PostAsJsonAsync(endPoint, request);
         var response = await resultRequest.Content.ReadFromJsonAsync<Response<Order>>();
         
-        var responseOther = resultRequest.IsSuccessStatusCode 
-            ? Response<Order>.Success()
-            : new Error("Invalid", "Invalid");
-        
-        return response ??responseOther;
+        return response! ;
     }
 
     public async Task<Response<Order>> RefundAsync(RefundOrderRequest request)

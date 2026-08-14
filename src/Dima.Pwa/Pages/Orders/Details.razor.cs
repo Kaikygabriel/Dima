@@ -39,4 +39,10 @@ public partial class Details : ComponentBase
 
         Order = result.Data;
     }
+
+    public void HasChangeScreen(Order newOrder)
+    {
+        Order = newOrder;
+        StateHasChanged();
+    } 
 }

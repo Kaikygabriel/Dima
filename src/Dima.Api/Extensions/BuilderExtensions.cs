@@ -1,9 +1,11 @@
+using Dima.Api.Configurations;
 using Dima.Api.Data.Context;
 using Dima.Api.Handlers;
 using Dima.Api.Models;
 using Dima.Core.Handler;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace Dima.Api.Extensions;
 
@@ -17,12 +19,17 @@ public  static class BuilderExtensions
         builder.Services.AddDbContext<AppDbContext>(x => 
             x.UseSqlServer(connection));
 
+        StripeConfiguration.ApiKey = builder.Configuration["ApiConfiguration:StripeKey"]
+                                     ?? throw new Exception("Key Stripe Not Found !");
+
+        builder.Services.AddOptions<ApiConfiguration>("ApiConfiguration");
         builder.Services.AddProblemDetails();
         return builder;
     }
 
     public static WebApplicationBuilder AddDependency(this WebApplicationBuilder builder)
     {
+        builder.Services.AddTransient<IStripeHandler,StripeHandler>();
         builder.Services.AddTransient<IVoucherHandler , VoucherHandler>();
         builder.Services.AddTransient<IProductHandler, ProductHandler>();
         builder.Services.AddTransient<IOrderHandler,OrderHandler>();
