@@ -3,8 +3,10 @@ using Dima.Core.Handler;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Dima.Pwa;
+using Dima.Pwa.Configurations;
 using Dima.Pwa.Handlers;
 using Dima.Pwa.Security;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
 
@@ -30,6 +32,9 @@ builder.Services.AddScoped<IReportHandler,ReportsHandler>();
 builder.Services.AddScoped<IUserHandler,UserHandler>();
 builder.Services.AddScoped<ICategoryHandler,CategoryHandler>();
 builder.Services.AddScoped<ITransactionHandler,TransactionHandler>();
+builder.Services.AddScoped<IStripeHandler,StripeHandler>();
+
+StripeConfiguration.PublicKey = builder.Configuration["PublicKey"] ?? throw new Exception("Public key Not Found !");
 
 builder.Services.AddMudServices();
 

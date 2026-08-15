@@ -22,7 +22,11 @@ public  static class BuilderExtensions
         StripeConfiguration.ApiKey = builder.Configuration["ApiConfiguration:StripeKey"]
                                      ?? throw new Exception("Key Stripe Not Found !");
 
-        builder.Services.AddOptions<ApiConfiguration>("ApiConfiguration");
+        builder.Services.AddOptions<ApiConfiguration>()
+            .BindConfiguration("ApiConfiguration")
+            .ValidateOnStart()
+            .ValidateDataAnnotations();
+        
         builder.Services.AddProblemDetails();
         return builder;
     }

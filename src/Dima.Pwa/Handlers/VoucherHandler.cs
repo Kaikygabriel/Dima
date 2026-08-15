@@ -3,6 +3,7 @@ using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Orders;
 using Dima.Core.Response;
+using Dima.Pwa.Configurations;
 
 namespace Dima.Pwa.Handlers;
 

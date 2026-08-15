@@ -4,6 +4,7 @@ using Dima.Core.Models;
 using Dima.Core.Requests.Transaction;
 using Dima.Core.Response;
 using Dima.Pwa.Security;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

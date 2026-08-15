@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using Dima.Core.Handler;
 using Dima.Core.Models.Reports;
 using Dima.Core.Response;
+using Dima.Pwa.Configurations;
 
 namespace Dima.Pwa.Handlers;
 

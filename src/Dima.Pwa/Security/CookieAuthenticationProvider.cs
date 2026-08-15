@@ -1,6 +1,8 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Dima.Core.Models.Accounts;
+using Dima.Pwa.Configurations;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Dima.Pwa.Security;

@@ -1,6 +1,7 @@
 using Dima.Core.Handler;
 using Dima.Core.Requests.Category;
 using Dima.Pwa.Security;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

@@ -3,6 +3,7 @@ using Dima.Core.Models;
 using Dima.Core.Requests.Category;
 using Dima.Core.Response;
 using Dima.Pwa.Security;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 namespace Dima.Pwa.Pages.Categories;

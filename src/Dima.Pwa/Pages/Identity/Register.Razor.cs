@@ -2,6 +2,7 @@ using Dima.Core.Handler;
 using Dima.Core.Requests.Accounts;
 using Dima.Pwa.Model.Identity;
 using Dima.Pwa.Security;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

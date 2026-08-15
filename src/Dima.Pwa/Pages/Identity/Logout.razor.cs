@@ -1,5 +1,6 @@
 using Dima.Core.Handler;
 using Dima.Pwa.Security;
+using Dima.Pwa.Security.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 namespace Dima.Pwa.Pages.Identity;

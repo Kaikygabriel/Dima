@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using Dima.Core.Handler;
 using Dima.Core.Requests.Accounts;
 using Dima.Core.Response;
+using Dima.Pwa.Configurations;
 
 namespace Dima.Pwa.Handlers;
 
