@@ -38,6 +38,7 @@ internal sealed class StripeHandler : IStripeHandler
             {
                 Metadata = new Dictionary<string, string>
                 {
+                    { "UserId", order.UserId.ToString() },
                     {"order",request.Id.ToString()}
                 }
             },

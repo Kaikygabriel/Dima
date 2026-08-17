@@ -78,7 +78,8 @@ public static class EndPointBase
         endpoints.MapGroup("v1/Stripe")
             .WithTags("Stripe")
             .RequireAuthorization()
-            .Map<CreateSessionEndPoint>();
+            .Map<CreateSessionEndPoint>()
+            .Map<WebHookEndPoint>();
 
         return app;
     }
