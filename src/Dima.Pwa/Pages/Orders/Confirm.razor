@@ -1,0 +1,25 @@
+@page "/order/{Id:guid}/confirm"
+
+@if (Order is null && Error is null)
+{
+    
+}
+else if (Error is not null)
+{
+    <MudText Align="Align.Center"
+             Color="Color.Error"
+             Typo="Typo.h3"
+    >
+        @Error.Title
+    </MudText>
+    <MudText Align="Align.Center"
+             Color="Color.Error"
+             Typo="Typo.h5"
+    >
+        @Error.Message
+    </MudText>
+}
+else
+{
+    <MudText Color="Color.Success" Align="Align.Center" Typo="Typo.h2">Order Paid</MudText>
+}

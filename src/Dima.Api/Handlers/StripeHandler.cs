@@ -4,6 +4,7 @@ using Dima.Core.Handler;
 using Dima.Core.Requests.Stripe;
 using Dima.Core.Response;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Stripe.Checkout;
 using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
 using SessionService = Stripe.Checkout.SessionService;
@@ -32,7 +33,7 @@ internal sealed class StripeHandler : IStripeHandler
         
         var options = new SessionCreateOptions()
         {
-            CustomerEmail =request.UserEmail,
+            CustomerEmail =user!.Email,
             PaymentIntentData = new SessionPaymentIntentDataOptions
             {
                 Metadata = new Dictionary<string, string>
@@ -59,8 +60,8 @@ internal sealed class StripeHandler : IStripeHandler
                 }
             ],
             Mode= "payment",
-            SuccessUrl = $"{ApiConfiguration.FrontEndUrl}/Order/{order.Id}/confirm",
-            CancelUrl = $"{ApiConfiguration.FrontEndUrl}/Order/{order.Id}/cancel",
+            SuccessUrl = $"{ApiConfiguration.FrontEndUrl}Order/{order.Id}/confirm",
+            CancelUrl = $"{ApiConfiguration.FrontEndUrl}Order/{order.Id}/cancel",
         };
         var services = new SessionService();
         var result=  await services.CreateAsync(options);
@@ -69,8 +70,27 @@ internal sealed class StripeHandler : IStripeHandler
         return result.Id ;
     }
 
-    public Task<Response<List<StripeTransactionReponse>>> GetTransactionsByOrder(GetTransactionsByOrderRequest request)
+    public async Task<Response<List<StripeTransactionReponse>>> GetTransactionsByOrder(GetTransactionsByOrderRequest request)
     {
-        throw new NotImplementedException();
+        var query = new ChargeSearchOptions()
+        {
+            Query = $"metadata['order']:'{request.Id}'"
+        };
+        var service = new ChargeService();
+        var result = await service.SearchAsync(query);
+
+        if (!result.Data.Any())
+            return new Error("Elements not found", "not found elemements.");
+
+        return result.Data.Select(x => new StripeTransactionReponse()
+        {
+            Id = x.Id,
+            Amount = x.Amount,
+            AmountCaptured = x.AmountCaptured,
+            Status = x.Status,
+            Email = x.BillingDetails.Email,
+            Paid = x.Paid,
+            Refound = x.Refunded
+        }).ToList();
     }
 }

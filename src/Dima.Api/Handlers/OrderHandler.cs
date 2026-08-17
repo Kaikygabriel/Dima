@@ -3,6 +3,8 @@ using Dima.Core.Enum;
 using Dima.Core.Handler;
 using Dima.Core.Models;
 using Dima.Core.Requests.Orders;
+using Dima.Core.Requests.Stripe;
+using Dima.Core.Requests.Transaction;
 using Dima.Core.Response;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +13,11 @@ namespace Dima.Api.Handlers;
 internal sealed class OrderHandler : IOrderHandler
 {
     private readonly AppDbContext _appDbContext;
-
-    public OrderHandler(AppDbContext appDbContext)
+    private readonly IStripeHandler _stripeHandler;
+    public OrderHandler(AppDbContext appDbContext, IStripeHandler stripeHandler)
     {
         _appDbContext = appDbContext;
+        _stripeHandler = stripeHandler;
     }
 
     public async Task<Response<Order>> CreateAsync(CreateOrderRequest request)
@@ -60,9 +63,25 @@ internal sealed class OrderHandler : IOrderHandler
         
         if(order.StatePayment is not EStatePayment.AwaitingPay)
             return new Error("Order not pay", "Order not pay !");
+
+        var requestTransactions = new GetTransactionsByOrderRequest()
+        {
+            Id = order.Id.ToString(),
+            UserId = order.UserId
+        };
+        var result = await _stripeHandler.GetTransactionsByOrder(requestTransactions);
+
+        if (!result.IsSuccess || result.Data is null)
+            return result.Error ?? new Error("Error","Invalid Response Get Transaction Orders");
+
+        if (result.Data.Exists(x => x.Refound))
+            return new Error("State  invalid", "Order already refound!");
+        
+        if(!result.Data.Exists(x=>x.Paid))
+            return new Error("State invalid", "Order not paid!");
         
         order.AlterState(EStatePayment.Paid);
-        order.AlterExternalCode(request.ExternalCode);
+        order.AlterExternalCode(result.Data.First().Id);
         
         _appDbContext.Update(order);
         await _appDbContext.SaveChangesAsync();
