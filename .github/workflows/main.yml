@@ -1,0 +1,29 @@
+name : deploy in azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  runs-on : ubuntu-latest
+
+  steps:
+  - name : checkout code
+    uses : actions/checkout@v6
+
+  - name : set up dotnet
+    uses : actions/setup-dotnet@v6
+
+  - name : build
+    run: dotnet build ./src/Dima.Api -c Release
+
+  - name : publish
+    run: dotnet publish ./src/Dima.Api -c Release -o ./publish
+  
+  - name: Deploy to Azure Web App
+    uses: azure/webapps-deploy@v3
+    with:
+      app-name: 'udemy-back' 
+      publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} 
+      package: './publish'
