@@ -1,0 +1,29 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+     - name: Checkout of Branch
+       uses: actions/checkout@v6
+
+     - name: setup dotnet
+       uses: actions/setup-dotnet@v6
+       
+     - name: Build
+       run: dotnet build -c Release
+         
+     - name: Pack
+       run: dotnet pack -c Release -o nuget
+         
+     - name: Auth GitHub
+       run: dotnet nuget add source --username Kaikygabriel --password ${{ secrets.KEY }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Kaikygabriel/index.json"
+       
+     - name: Publish in GitHub
+       run: dotnet nuget push "./nuget/*.nupkg" --api-key ${{ secrets.KEY }} --source "github"
