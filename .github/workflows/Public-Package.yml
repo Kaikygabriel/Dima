@@ -17,10 +17,10 @@ jobs:
        uses: actions/setup-dotnet@v6
        
      - name: Build
-       run: dotnet build -c Release
+       run: dotnet build ./src/Dima.Core -c Release
          
      - name: Pack
-       run: dotnet pack -c Release -o nuget
+       run: dotnet pack ./src/Dima.Core -c Release -o nuget
          
      - name: Auth GitHub
        run: dotnet nuget add source --username Kaikygabriel --password ${{ secrets.KEY }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Kaikygabriel/index.json"
