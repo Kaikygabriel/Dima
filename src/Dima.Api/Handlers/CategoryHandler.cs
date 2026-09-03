@@ -43,7 +43,9 @@ internal sealed class CategoryHandler : ICategoryHandler
             .AsNoTracking()
             .Where(x => x.UserId == request.UserId);
         
-        var categories = await query
+        var categories = await _appDbContext.Categories
+                .AsNoTracking()
+                .Where(x => x.UserId == request.UserId)
             .Skip((request.Page  - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
@@ -51,7 +53,9 @@ internal sealed class CategoryHandler : ICategoryHandler
         if (!categories.Any())
             return new Error("Categories.NotFound", "Categories not found !");
 
-        var count = await query
+        var count = await _appDbContext.Categories
+            .AsNoTracking()
+            .Where(x => x.UserId == request.UserId)
             .CountAsync(cancellationToken);
         
         return  new(categories,request.Page,count,request.PageSize);

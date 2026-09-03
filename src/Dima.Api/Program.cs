@@ -23,10 +23,8 @@ builder.Services.AddScoped<
 builder.WebHost.UseKestrel(x=>x.AddServerHeader = false);
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperEnvironment();
-}
+
+app.UseDeveloperEnvironment();
 
 app.MapEndpoints();
 
