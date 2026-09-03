@@ -13,16 +13,16 @@ public  static class BuilderExtensions
 {
     public static WebApplicationBuilder AddConfiguration(this WebApplicationBuilder builder)
     {
-        var connection = builder.Configuration.GetConnectionString("DefaultConnection")
+        var connection = builder.Configuration["ConnectionStrings_DefaultConnection"]
                          ?? throw new Exception("Connection String Not Found !");
         
         builder.Services.AddDbContext<AppDbContext>(x => 
             x.UseSqlServer(connection));
 
-        StripeConfiguration.ApiKey = builder.Configuration["ApiConfiguration:StripeKey"]
+        StripeConfiguration.ApiKey = builder.Configuration["ApiConfiguration_StripeKey"]
                                      ?? throw new Exception("Key Stripe Not Found !");
 
-        ApiConfiguration.SecretKeyWebHook = builder.Configuration["Stripe:WebHookKey"]
+        ApiConfiguration.SecretKeyWebHook = builder.Configuration["Stripe_WebHookKey"]
                                          ?? throw new Exception("Key Stripe WEb HOOK Not Found !");
         
         builder.Services.AddOptions<ApiConfiguration>()
@@ -53,7 +53,7 @@ public  static class BuilderExtensions
     {
         builder.Services.AddCors(x =>
             x.AddDefaultPolicy( x =>
-                x.WithOrigins(builder.Configuration["Url:FrontEndHttp"]!,builder.Configuration["Url:FrontEndHttps"]!)
+                x.WithOrigins(builder.Configuration["Url_FrontEnd_Http"]!,builder.Configuration["Url_FrontEnd_Https"]!)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials())
