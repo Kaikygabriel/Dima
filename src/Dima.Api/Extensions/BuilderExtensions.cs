@@ -24,12 +24,7 @@ public  static class BuilderExtensions
 
         ApiConfiguration.SecretKeyWebHook = builder.Configuration["Stripe_WebHookKey"]
                                          ?? throw new Exception("Key Stripe WEb HOOK Not Found !");
-        
-        builder.Services.AddOptions<ApiConfiguration>()
-            .BindConfiguration("ApiConfiguration")
-            .ValidateOnStart()
-            .ValidateDataAnnotations();
-        
+
         builder.Services.AddProblemDetails();
         return builder;
     }
