@@ -1,0 +1,48 @@
+name: Deploy Package in Github Packages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        
+      - name: SetUp .Net
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+          
+      - name: Build
+        run: dotnet build -c Release
+        
+      - name: Test
+        run: dotnet test
+      
+      - name: Build Package
+        run: dotnet pack -c Release -o nuget
+#github packages      
+      - name: Add source Github
+        run: dotnet nuget add source --username kaikygabriel --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/kaikygabriel/index.json"
+        
+      - name: Publish package in GitHub 
+        run: dotnet nuget push "./nuget/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+      
+#nuget
+      - name: Publish Nuget to GitHub registry
+        run: dotnet nuget push "./nuget/*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{ GITHUB_NUGET }}
+# azure
+      - name: Build Publish
+        run: dotnet publish -c Release -o publish
+        
+      - name: Publish in Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
+          package: './publish'
