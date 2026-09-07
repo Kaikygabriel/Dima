@@ -10,7 +10,7 @@ builder.AddDependency();
 builder.AddConfigurationLogging();
 builder.AddSecurity();
 builder.AddCors();
-builder.Services.AddDocumentation();
+builder.Services.AddDocumentation(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.SameSite = SameSiteMode.None;

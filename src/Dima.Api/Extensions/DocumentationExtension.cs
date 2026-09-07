@@ -4,7 +4,7 @@ namespace Dima.Api.Extensions;
 
 public static class DocumentationExtension
 {
-    public static IServiceCollection AddDocumentation(this IServiceCollection services)
+    public static IServiceCollection AddDocumentation(this IServiceCollection services,IConfiguration configuration)
     {
         services.AddEndpointsApiExplorer();
         services.AddOpenApi("v1",x =>
@@ -13,8 +13,8 @@ public static class DocumentationExtension
             {
                 document.Servers =
                 [
-                    new OpenApiServer { Url = "https://localhost:7279", Description = "Server in Https" },
-                    new OpenApiServer { Url = "http://localhost:5007", Description = "Server in Http" }
+                    new OpenApiServer { Url = configuration["Url:BackEndHttps"], Description = "Server in Https" },
+                    new OpenApiServer { Url =configuration["Url:BackEndHttp"], Description = "Server in Http" }
                 ];
                 document.Info = new OpenApiInfo()
                 {
