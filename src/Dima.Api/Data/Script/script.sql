@@ -129,3 +129,124 @@ VALUES (N'20260531131905_v1', N'10.0.8');
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+DECLARE @var nvarchar(max);
+SELECT @var = QUOTENAME([d].[name])
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[IdentityUser]') AND [c].[name] = N'Id');
+IF @var IS NOT NULL EXEC(N'ALTER TABLE [IdentityUser] DROP CONSTRAINT ' + @var + ';');
+ALTER TABLE [IdentityUser] ADD DEFAULT '3f224111-61ca-46d7-9dfb-e3a26419b9e5' FOR [Id];
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260616132034_UpdateModel', N'10.0.8');
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+DECLARE @var1 nvarchar(max);
+SELECT @var1 = QUOTENAME([d].[name])
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[IdentityUser]') AND [c].[name] = N'Id');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [IdentityUser] DROP CONSTRAINT ' + @var1 + ';');
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260616133327_UpdateModel.2', N'10.0.8');
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+CREATE TABLE [Product] (
+    [Id] uniqueidentifier NOT NULL,
+    [Title] VARCHAR(160) NOT NULL,
+    [Description] VARCHAR(250) NOT NULL,
+    [IsActive] BIT NOT NULL,
+    [Price] MONEY NOT NULL,
+    CONSTRAINT [PK_Product] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [Voucher] (
+    [Id] uniqueidentifier NOT NULL,
+    [Code] CHAR(8) NOT NULL,
+    [Title] VARCHAR(160) NOT NULL,
+    [Description] VARCHAR(255) NOT NULL,
+    [Amount] MONEY NOT NULL,
+    [StartDate] DATETIME2 NOT NULL,
+    [EndDate] DATETIME2 NOT NULL,
+    [UserId] uniqueidentifier NULL,
+    CONSTRAINT [PK_Voucher] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Voucher_IdentityUser_UserId] FOREIGN KEY ([UserId]) REFERENCES [IdentityUser] ([Id])
+);
+
+CREATE TABLE [Order] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExternalReference] VARCHAR(100) NULL,
+    [CreateAt] DATETIME2 NOT NULL,
+    [UpdateAt] DATETIME2 NOT NULL,
+    [PaymentGateway] nvarchar(max) NOT NULL,
+    [StatePayment] nvarchar(max) NOT NULL,
+    [ProductId] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [VoucherId] uniqueidentifier NULL,
+    CONSTRAINT [PK_Order] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Order_Product_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [Product] ([Id]),
+    CONSTRAINT [FK_Order_Voucher_VoucherId] FOREIGN KEY ([VoucherId]) REFERENCES [Voucher] ([Id])
+);
+
+CREATE INDEX [IX_Order_ProductId] ON [Order] ([ProductId]);
+
+CREATE INDEX [IX_Order_VoucherId] ON [Order] ([VoucherId]);
+
+CREATE UNIQUE INDEX [IX_Voucher_Code] ON [Voucher] ([Code]);
+
+CREATE UNIQUE INDEX [IX_Voucher_Title] ON [Voucher] ([Title]);
+
+CREATE INDEX [IX_Voucher_UserId] ON [Voucher] ([UserId]);
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260727122950_ReportsModels', N'10.0.8');
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+ALTER TABLE [Voucher] DROP CONSTRAINT [FK_Voucher_IdentityUser_UserId];
+
+DROP INDEX [IX_Voucher_UserId] ON [Voucher];
+
+DECLARE @var2 nvarchar(max);
+SELECT @var2 = QUOTENAME([d].[name])
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Voucher]') AND [c].[name] = N'UserId');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Voucher] DROP CONSTRAINT ' + @var2 + ';');
+ALTER TABLE [Voucher] DROP COLUMN [UserId];
+
+CREATE TABLE [VoucherUser] (
+    [VoucherId] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_VoucherUser] PRIMARY KEY ([VoucherId], [UserId]),
+    CONSTRAINT [FK_VoucherUser_UserId] FOREIGN KEY ([UserId]) REFERENCES [IdentityUser] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_VoucherUser_VoucherId] FOREIGN KEY ([VoucherId]) REFERENCES [Voucher] ([Id]) ON DELETE CASCADE
+);
+
+CREATE INDEX [IX_VoucherUser_UserId] ON [VoucherUser] ([UserId]);
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260728132908_UpdateReportsModels', N'10.0.8');
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+ALTER TABLE [Order] ADD [PaytAt] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260803135841_UpdateReportsModels.2', N'10.0.8');
+
+COMMIT;
+GO
+

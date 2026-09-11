@@ -1,3 +1,4 @@
+using Dima.Api.Configurations;
 using Dima.Api.EndPoints;
 using Dima.Api.Extensions;
 using Dima.Api.Models;
@@ -19,6 +20,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<
     IUserClaimsPrincipalFactory<User>,
     CustomClaimsPrincipalFactory>();
+builder.Services.AddScoped<StorageConfiguration>(x => new StorageConfiguration()
+{
+    ConnectionString  = builder.Configuration["Storage:ConnectionString"] ?? throw new Exception("Not Found Connection string Storage"),
+    ContainerImage =  builder.Configuration["Storage:ContainerImage"] ?? throw new Exception("Not Found Container name Of Storage"),
+});
 
 builder.WebHost.UseKestrel(x=>x.AddServerHeader = false);
 
@@ -27,6 +33,8 @@ var app = builder.Build();
 app.UseDeveloperEnvironment();
 
 app.MapEndpoints();
+
+app.UseStaticFiles();
 
 app.UseCors();
 

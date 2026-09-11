@@ -4,7 +4,7 @@ namespace Dima.Core.Models;
 
 public class Product : Model
 {
-    private Product()
+     private Product()
     {
          
     }
